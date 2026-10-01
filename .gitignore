@@ -1,0 +1,5 @@
+_site/
+__pycache__/
+.DS_Store
+index.backup-*.html
+.portfolio-media.tmp

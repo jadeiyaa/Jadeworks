@@ -1,0 +1,23 @@
+# Move whole lines up or down to reorder the gallery. Save as plain text.
+# Use project names without file extensions. Unlisted new projects appear at the end.
+
+Wishbone
+Confluence
+0nian
+Asminthia
+Cobbore
+Desolate
+Ephemryst
+Endozivite
+Glitzar
+IBLIS
+Niosha
+NOOPA
+Pith
+Psi
+Quasar 618
+Thermazine
+Ultra Sinistral
+Retina
+Y
+NILNAL

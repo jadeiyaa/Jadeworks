@@ -1,1645 +1,247 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jadeworks | Portfolio | @jadeiya</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;1,6..96,400&family=Syne:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
-    <style>
-        :root {
-            --bg-base: #030504;
-            --bg-radial: #0a120e;
-            --text-main: #e8eee9;
-            --text-muted: #8b968f;
-            --glass: rgba(255, 255, 255, 0.03);
-            --glass-border: rgba(255, 255, 255, 0.08);
-            --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
-            --jade-shine: #15ff92;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            background: radial-gradient(circle at center, var(--bg-radial) 0%, var(--bg-base) 100%);
-            color: var(--text-main);
-            font-family: 'Syne', sans-serif;
-            height: 100vh;
-            width: 100vw;
-            overflow: hidden;
-            user-select: none;
-            -webkit-font-smoothing: antialiased;
-            /* Smooth page entrance animation */
-            animation: pageEntrance 1.5s var(--spring) forwards;
-        }
-
-        @keyframes pageEntrance {
-            0% { opacity: 0; transform: translateY(15px) scale(0.98); }
-            100% { opacity: 1; transform: translateY(0) scale(1); }
-        }
-
-        /* Ambient Grain Texture */
-        .noise-overlay {
-            position: fixed;
-            inset: 0;
-            pointer-events: none;
-            z-index: 9999;
-            opacity: 0.04;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-        }
-
-        /* ------------------
-           SPARKLES DECORATION
-           ------------------ */
-        .sparkles-container {
-            position: absolute;
-            inset: 0;
-            pointer-events: none;
-            z-index: 0; 
-            overflow: hidden;
-        }
-        .sparkle {
-            position: absolute;
-            background: #fff;
-            clip-path: polygon(50% 0%, 60% 40%, 100% 50%, 60% 60%, 50% 100%, 40% 60%, 0% 50%, 40% 40%);
-            animation: twinkle linear forwards;
-            opacity: 0;
-        }
-        @keyframes twinkle {
-            0% { opacity: 0; transform: scale(0) rotate(0deg); }
-            50% { opacity: 0.8; transform: scale(1) rotate(45deg); }
-            100% { opacity: 0; transform: scale(0) rotate(90deg); }
-        }
-
-        /* ------------------
-           WATERMARK OVERLAY
-           ------------------ */
-        .watermark-overlay {
-            position: fixed;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            pointer-events: none;
-            z-index: 8; 
-            opacity: 0;
-            transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1);
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' transform='rotate(-40 70 70)' fill='rgba(255,255,255,0.04)' font-size='24' font-family='sans-serif' font-weight='bold' letter-spacing='2'%3E@jadeiya%3C/text%3E%3C/svg%3E");
-            background-repeat: repeat;
-            animation: scrollWatermark 20s linear infinite;
-        }
-
-        .watermark-overlay.active {
-            opacity: 1;
-        }
-
-        @keyframes scrollWatermark {
-            0% { transform: translate(0, 0); }
-            100% { transform: translate(-140px, -140px); }
-        }
-
-        /* ------------------
-           TUTORIAL OVERLAY
-           ------------------ */
-        .tutorial-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(3, 5, 4, 0.6);
-            backdrop-filter: blur(12px);
-            z-index: 2000;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.8s var(--spring);
-        }
-
-        .tutorial-overlay.active {
-            opacity: 1;
-        }
-
-        .mouse-icon {
-            width: 28px;
-            height: 44px;
-            border: 2px solid var(--text-main);
-            border-radius: 14px;
-            position: relative;
-            margin-bottom: 1rem;
-        }
-
-        .scroll-wheel {
-            width: 4px;
-            height: 8px;
-            background: var(--text-main);
-            border-radius: 2px;
-            position: absolute;
-            top: 8px;
-            left: 50%;
-            margin-left: -2px;
-            animation: scrollWheelAnim 1.2s infinite cubic-bezier(0.15, 0.41, 0.69, 0.94);
-        }
-
-        @keyframes scrollWheelAnim {
-            0% { transform: translateY(0); opacity: 1; }
-            50% { opacity: 1; }
-            100% { transform: translateY(12px); opacity: 0; }
-        }
-
-        .tutorial-text {
-            font-family: 'Syne', sans-serif;
-            font-size: 0.85rem;
-            letter-spacing: 0.1em;
-            color: var(--text-main);
-            text-transform: lowercase;
-            font-weight: 500;
-        }
-
-        /* ------------------
-           LANDING PAGE
-           ------------------ */
-        .landing-view {
-            position: absolute;
-            inset: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1);
-            z-index: 10;
-        }
-
-        .landing-view.hidden {
-            opacity: 0;
-            transform: scale(0.95) translateY(-20px);
-            pointer-events: none;
-        }
-
-        .hero-title {
-            font-family: 'Syne', sans-serif;
-            font-size: clamp(3rem, 10vw, 9rem);
-            font-weight: 700;
-            letter-spacing: -0.02em;
-            line-height: 1;
-            text-transform: uppercase;
-            background: linear-gradient(180deg, #ffffff 0%, rgba(255, 255, 255, 0.8) 60%, rgba(21, 255, 146, 0.35) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            position: relative;
-            z-index: 2;
-        }
-
-        .hero-subtitle-container {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-top: 1.5rem;
-            z-index: 2;
-        }
-
-        .profile-pic {
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            overflow: hidden;
-            border: 2px solid var(--glass-border);
-        }
-
-        .profile-pic img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .hero-subtitle {
-            font-family: 'Syne', sans-serif;
-            font-size: 0.9rem;
-            letter-spacing: 0.3em;
-            font-weight: 600;
-            color: var(--text-muted);
-            text-transform: uppercase;
-        }
-
-        /* ------------------
-           3D GALLERY (Base)
-           ------------------ */
-        .gallery-view {
-            position: absolute;
-            inset: 0;
-            perspective: 2000px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1);
-            z-index: 5;
-        }
-
-        .gallery-view.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        .scene {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            transform-style: preserve-3d;
-            cursor: grab;
-        }
-
-        .scene:active {
-            cursor: grabbing;
-        }
-
-        .gallery-item {
-            position: absolute;
-            left: 50%; 
-            top: 50%;
-            width: 234px; 
-            height: 351px;
-            margin-left: -117px; 
-            margin-top: -175.5px; 
-            border-radius: 12px;
-            overflow: hidden;
-            background: var(--glass);
-            border: 1px solid var(--glass-border);
-            backdrop-filter: blur(10px);
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255,255,255,0.1);
-            transition: opacity 0.3s linear;
-            cursor: pointer;
-        }
-
-        .gallery-item img {
-            position: absolute;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.7s var(--spring);
-        }
-
-        .gallery-item:hover img {
-            transform: scale(1.05);
-        }
-
-        .item-content {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            padding: 1.2rem 0.8rem 0.8rem; 
-            background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 100%);
-            color: #fff;
-        }
-
-        .item-title {
-            font-family: 'Bodoni Moda', serif;
-            font-size: 1.1rem; 
-            margin-bottom: 0.2rem;
-        }
-
-        .item-subtitle {
-            font-size: 0.7rem;
-            color: var(--text-muted);
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-        }
-
-        /* Coming Soon Text */
-        .coming-soon {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-family: 'Bodoni Moda', serif;
-            font-size: 2rem;
-            color: rgba(255,255,255,0.8);
-            font-style: italic;
-            letter-spacing: 0.05em;
-            pointer-events: none;
-            animation: pulseText 2.5s infinite alternate ease-in-out;
-        }
-        @keyframes pulseText {
-            0% { opacity: 0.3; }
-            100% { opacity: 0.8; }
-        }
-
-        /* ------------------
-           VIDEO MODAL
-           ------------------ */
-        .video-modal {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(10px);
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.4s var(--spring);
-        }
-
-        .video-modal.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        .video-container {
-            position: relative;
-            width: 90%;
-            max-width: 1000px;
-            aspect-ratio: 16/9;
-            background: #000;
-            border: 1px solid var(--glass-border);
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-            transform: scale(0.95) translateY(20px);
-            transition: transform 0.4s var(--spring);
-        }
-
-        .video-modal.active .video-container {
-            transform: scale(1) translateY(0);
-        }
-
-        .video-container video {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            outline: none;
-        }
-
-        .close-video {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            background: rgba(255,255,255,0.1);
-            border: none;
-            color: #fff;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            z-index: 10;
-            transition: background 0.3s ease;
-            backdrop-filter: blur(5px);
-        }
-
-        .close-video:hover {
-            background: rgba(255,255,255,0.3);
-        }
-
-        /* ------------------
-           COMMISSION INFO ORBIT
-           ------------------ */
-        .commission-view {
-            position: absolute;
-            inset: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1);
-            z-index: 5;
-            background: #000000;
-        }
-
-        .commission-view.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        .orbit-container {
-            position: relative;
-            width: 100%;
-            max-width: 800px;
-            height: 600px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-top: -60px;
-            transition: transform 0.8s var(--spring);
-            z-index: 2;
-        }
-
-        .orbit-ring {
-            position: absolute;
-            width: 500px;
-            height: 175px; 
-            border-radius: 50%;
-            border: 1px solid var(--glass-border);
-            pointer-events: none;
-        }
-
-        .orbit-center {
-            position: absolute;
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid var(--glass-border);
-            backdrop-filter: blur(8px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 10;
-            box-shadow: inset 0 0 20px rgba(255,255,255,0.02), 0 0 30px rgba(255,255,255,0.05);
-        }
-
-        .orbit-center-img {
-            width: 60%;
-            height: 60%;
-            object-fit: contain;
-            animation: spinCCW 15s linear infinite;
-            opacity: 0.8;
-            pointer-events: none;
-        }
-
-        @keyframes spinCCW {
-            100% { transform: rotate(-360deg); }
-        }
-
-        .orbit-node-wrapper {
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            cursor: pointer;
-        }
-
-        .orbit-node {
-            position: absolute;
-            transform: translate(-50%, -50%);
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            background: rgba(10, 18, 14, 0.8);
-            border: 1px solid var(--glass-border);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-main);
-            transition: all 0.3s var(--spring); 
-            backdrop-filter: blur(10px);
-        }
-
-        .orbit-node:hover {
-            background: rgba(255,255,255,0.05);
-            border-color: rgba(255,255,255,0.2);
-        }
-
-        .orbit-node.tos-node {
-            border-color: rgba(21, 255, 146, 0.8);
-            box-shadow: 0 0 15px rgba(21, 255, 146, 0.3), inset 0 0 10px rgba(21, 255, 146, 0.2);
-        }
-        .orbit-node.tos-node svg {
-            color: var(--jade-shine);
-            filter: drop-shadow(0 0 5px rgba(21,255,146,0.5));
-        }
-
-        .orbit-node.expanded {
-            background: var(--text-main);
-            color: #000;
-            transform: translate(-50%, -50%) scale(1.15);
-            border-color: var(--text-main);
-            box-shadow: 0 0 20px rgba(255,255,255,0.1);
-            z-index: 50;
-        }
-
-        .orbit-node.tos-node.expanded {
-            background: var(--jade-shine);
-            color: #000;
-            border-color: var(--jade-shine);
-        }
-        .orbit-node.tos-node.expanded svg {
-            color: #000;
-            filter: none;
-        }
-
-        .orbit-node-title {
-            position: absolute;
-            top: 35px;
-            left: 50%;
-            transform: translateX(-50%);
-            white-space: nowrap;
-            font-size: 0.75rem;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            color: var(--text-muted);
-            transition: all 0.3s;
-            pointer-events: none;
-        }
-
-        .orbit-node-title.tos-title {
-            color: var(--jade-shine);
-            font-weight: 700;
-            text-shadow: 0 0 8px rgba(21, 255, 146, 0.5);
-        }
-
-        .orbit-node.expanded .orbit-node-title {
-            color: var(--text-main);
-            top: 45px; 
-            font-weight: 600;
-        }
-        
-        .orbit-node.tos-node.expanded .orbit-node-title.tos-title {
-            color: var(--jade-shine);
-        }
-
-        .orbit-card {
-            position: absolute;
-            top: 50px;
-            left: 50%;
-            transform: translateX(-50%) translateY(10px);
-            width: 320px;
-            background: rgba(10, 18, 14, 0.85);
-            border: 1px solid var(--glass-border);
-            border-radius: 12px;
-            padding: 1.5rem;
-            opacity: 0;
-            pointer-events: none;
-            transition: all 0.4s var(--spring);
-            backdrop-filter: blur(20px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
-            z-index: 40;
-            max-height: 55vh;
-            overflow-y: auto;
-        }
-        
-        .orbit-card::-webkit-scrollbar { width: 4px; }
-        .orbit-card::-webkit-scrollbar-track { background: transparent; }
-        .orbit-card::-webkit-scrollbar-thumb { background: var(--glass-border); border-radius: 4px; }
-        .orbit-card::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
-
-        #card-2.expanded-pricing {
-            width: 460px;
-            padding: 1.5rem 1.25rem;
-        }
-        
-        #card-2.expanded-pricing-height {
-            max-height: 62vh; 
-        }
-
-        .orbit-card.expanded-tos {
-            width: 420px;
-            max-height: 60vh;
-        }
-        .expanded-tos p {
-            font-size: 0.85rem;
-            line-height: 1.7;
-        }
-
-        .orbit-card.active {
-            opacity: 1;
-            transform: translateX(-50%) translateY(0);
-            pointer-events: auto;
-        }
-
-        .orbit-card h3 {
-            font-family: 'Bodoni Moda', serif;
-            font-size: 1.3rem;
-            margin-bottom: 0.75rem;
-            color: var(--text-main);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .orbit-card p {
-            font-size: 0.85rem;
-            line-height: 1.6;
-            color: rgba(255,255,255,0.7);
-            margin-bottom: 0;
-        }
-
-        /* --- CUSTOM PROFILE CARD STYLING --- */
-        .profile-layout {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            padding: 0.5rem 0;
-        }
-        .profile-avatar {
-            width: 72px;
-            height: 72px;
-            border-radius: 50%;
-            overflow: hidden;
-            border: 2px solid var(--glass-border);
-            margin-bottom: 0.75rem;
-            background: rgba(255,255,255,0.05);
-        }
-        .profile-avatar img { width: 100%; height: 100%; object-fit: cover; }
-        .profile-name { font-family: 'Syne', sans-serif !important; font-size: 1.4rem !important; font-weight: 700; margin-bottom: 0.2rem !important; color: var(--text-main) !important; }
-        .profile-username { font-family: 'Syne', sans-serif; font-size: 0.8rem !important; color: var(--text-muted) !important; letter-spacing: 0.05em; margin-bottom: 1.25rem !important; }
-        .profile-desc { font-size: 0.85rem !important; color: rgba(255,255,255,0.7) !important; line-height: 1.6 !important; }
-
-        /* --- PRICING WIDGET STYLING --- */
-        .pricing-controls-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.25rem;
-            gap: 1rem;
-            flex-wrap: wrap; 
-        }
-        
-        .pricing-mini-dock {
-            display: flex;
-            justify-content: center;
-            gap: 0.25rem;
-            background: rgba(255,255,255,0.03);
-            border: 1px solid var(--glass-border);
-            border-radius: 2rem;
-            padding: 0.5rem;
-        }
-        
-        .pricing-mini-dock button {
-            background: transparent;
-            border: none;
-            color: var(--text-muted);
-            font-family: 'Syne', sans-serif;
-            font-size: 0.75rem;
-            font-weight: 600;
-            padding: 0.5rem 1rem;
-            border-radius: 1.5rem;
-            cursor: pointer;
-            transition: all 0.3s var(--spring);
-            display: flex;
-            align-items: center;
-            gap: 0.3rem;
-        }
-        
-        .pricing-mini-dock button:hover {
-            color: var(--text-main);
-            background: rgba(255,255,255,0.05);
-        }
-        
-        .pricing-mini-dock button.active {
-            background: var(--text-main);
-            color: #000;
-            box-shadow: 0 4px 10px rgba(255,255,255,0.1);
-        }
-        
-        .pricing-mini-dock button svg { width: 14px; height: 14px; }
-
-        /* Normal vs Xtra Toggle */
-        .pricing-toggle {
-            display: flex;
-            background: rgba(0,0,0,0.5);
-            border: 1px solid var(--glass-border);
-            border-radius: 12px;
-            padding: 4px;
-            position: relative;
-            min-width: 210px;
-            flex: 1;
-        }
-        .pricing-toggle-btn {
-            flex: 1;
-            text-align: center;
-            padding: 8px 0;
-            z-index: 2;
-            color: var(--text-muted);
-            font-family: 'Syne', sans-serif;
-            font-weight: 600;
-            font-size: 0.85rem;
-            cursor: pointer;
-            transition: color 0.3s;
-            border: none;
-            background: transparent;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-        }
-        .pricing-toggle-btn.active { color: var(--text-main); }
-        .pricing-toggle-bg {
-            position: absolute;
-            top: 4px;
-            bottom: 4px;
-            width: calc(50% - 4px);
-            background: rgba(255,255,255,0.08);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 8px;
-            transition: transform 0.4s var(--spring);
-            z-index: 1;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-        }
-        .pricing-toggle[data-mode="Xtra"] .pricing-toggle-bg { transform: translateX(100%); }
-        
-        /* New Subtitle styling */
-        .pricing-mode-subtitle {
-            text-align: center;
-            font-size: 0.7rem;
-            color: var(--text-muted);
-            margin-top: 0.6rem;
-            font-style: italic;
-            letter-spacing: 0.05em;
-            animation: fadeIn 0.3s ease forwards;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-3px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Plan Tiers: Vertical Grid & Scrollable */
-        .plans-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 0.75rem;
-        }
-
-        .plan-tier-card {
-            background: rgba(0,0,0,0.3);
-            border: 1px solid var(--glass-border);
-            border-radius: 12px;
-            padding: 1.25rem;
-            transition: all 0.3s var(--spring);
-            cursor: pointer;
-        }
-        .plan-tier-card:hover {
-            border-color: rgba(255,255,255,0.2);
-            background: rgba(255,255,255,0.02);
-        }
-        .plan-tier-card.active {
-            border-color: var(--jade-shine);
-            background: rgba(21, 255, 146, 0.03);
-            cursor: default;
-        }
-
-        .plan-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 1.25rem;
-        }
-        .plan-name-wrap h4 { font-size: 1.1rem; color: var(--text-main); margin-bottom: 0.1rem; }
-        .plan-name-wrap p { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); }
-        
-        .plan-price-wrap { text-align: right; font-family: monospace; }
-        .plan-robux { font-size: 1.2rem; font-weight: 600; color: var(--text-main); }
-        .plan-suffix { font-family: 'Syne', sans-serif; font-size: 0.75rem; color: var(--text-muted); }
-
-        .plan-divider { height: 1px; background: var(--glass-border); margin-bottom: 1.25rem; }
-
-        .feature-item {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.8rem;
-            color: rgba(255,255,255,0.8);
-            margin-bottom: 0.6rem;
-        }
-        .feature-item svg { color: var(--jade-shine); width: 16px; height: 16px; }
-
-        .order-btn {
-            width: 100%;
-            padding: 10px 0;
-            border-radius: 8px;
-            background: transparent;
-            border: 1px solid var(--glass-border);
-            color: var(--text-muted);
-            font-family: 'Syne', sans-serif;
-            font-size: 0.8rem;
-            font-weight: 600;
-            margin-top: 1.25rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        .plan-tier-card:hover .order-btn { border-color: rgba(255,255,255,0.3); color: var(--text-main); }
-        .plan-tier-card.active .order-btn {
-            background: var(--text-main);
-            color: #000;
-            border-color: var(--text-main);
-        }
-
-        /* --- CUSTOM POPUP ICONS & ANIMATIONS --- */
-        @keyframes spin { 100% { transform: rotate(360deg); } }
-        .animated-clock { position: relative; width: 18px; height: 18px; border: 1.5px solid var(--text-muted); border-radius: 50%; display: inline-block; margin-left: 8px; }
-        .animated-clock::before, .animated-clock::after { content: ''; position: absolute; bottom: 50%; left: 50%; transform-origin: bottom center; background: var(--text-main); border-radius: 2px; }
-        .animated-clock::before { width: 1.5px; height: 4px; margin-left: -0.75px; animation: spin 12s linear infinite; }
-        .animated-clock::after { width: 1.5px; height: 6px; margin-left: -0.75px; background: var(--text-muted); animation: spin 1s linear infinite; }
-
-        @keyframes strike { 0%, 100% { transform: rotate(0deg); } 20% { transform: rotate(-35deg); } 40% { transform: rotate(10deg); } 50% { transform: rotate(0deg); } }
-        .animated-gavel { display: flex; align-items: center; margin-left: 8px; color: var(--text-muted); transform-origin: bottom left; animation: strike 2s infinite ease-out; }
-
-        @keyframes drive { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-2px); } }
-        .animated-truck { display: flex; align-items: center; margin-left: 8px; color: var(--text-muted); animation: drive 0.6s infinite ease-in-out; }
-
-        /* ------------------
-           DOCK HOVER / IOS INDICATOR
-           ------------------ */
-        .dock-hover-trigger {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 150px;
-            z-index: 99;
-            display: none;
-        }
-
-        .ios-indicator {
-            position: fixed;
-            bottom: 12px;
-            left: 50%;
-            transform: translateX(-50%) translateY(20px);
-            width: 130px;
-            height: 5px;
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 10px;
-            opacity: 0;
-            transition: transform 0.6s var(--spring), opacity 0.4s var(--spring);
-            z-index: 101;
-            pointer-events: none;
-            box-shadow: 0 1px 5px rgba(0,0,0,0.5);
-        }
-
-        /* ------------------
-           DOCK COMPONENT
-           ------------------ */
-        .dock-container {
-            position: fixed;
-            bottom: 2.5rem;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 100;
-            transition: transform 0.6s var(--spring), opacity 0.4s var(--spring);
-        }
-
-        .dock {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.75rem 1rem;
-            background: rgba(10, 18, 14, 0.6);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-radius: 2rem;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
-        }
-
-        .dock-container.hidden-dock {
-            transform: translateX(-50%) translateY(150px);
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .dock-separator { width: 1px; height: 24px; background: var(--glass-border); margin: 0 0.5rem; }
-
-        .dock-item {
-            position: relative; width: 3.5rem; height: 3.5rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--text-main); background: transparent; border: none; cursor: pointer; transition: all 0.4s var(--spring);
-        }
-        .dock-item svg { width: 20px; height: 20px; transition: transform 0.3s ease; }
-        .dock-item:hover { background: rgba(255,255,255,0.08); transform: translateY(-12px) scale(1.15); }
-        .dock-item:hover svg { transform: scale(1.1); }
-
-        .tooltip {
-            position: absolute; top: -45px; left: 50%; transform: translateX(-50%) translateY(10px); background: #fff; color: #000; padding: 6px 12px; font-size: 0.75rem; font-weight: 600; border-radius: 6px; pointer-events: none; opacity: 0; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); white-space: nowrap; box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-        }
-        .dock-item:hover .tooltip { opacity: 1; transform: translateX(-50%) translateY(0); }
-        .tooltip::after { content: ''; position: absolute; bottom: -4px; left: 50%; transform: translateX(-50%) rotate(45deg); width: 8px; height: 8px; background: #fff; }
-    </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Jadeworks — visual effects and modelling by @johnmasterxx. Explore creations and commission information.">
+<title>Jadeworks | Portfolio | @johnmasterxx</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500&family=Josefin+Sans:wght@400;500;600&display=swap">
 </head>
 <body>
-
-    <div class="noise-overlay"></div>
-    
-    <div id="watermarkOverlay" class="watermark-overlay"></div>
-
-    <div id="tutorialOverlay" class="tutorial-overlay">
-        <div class="mouse-icon"><div class="scroll-wheel"></div></div>
-        <p class="tutorial-text">scroll to explore my stuff</p>
-    </div>
-
-    <div id="landingView" class="landing-view active">
-        <div id="landingSparkles" class="sparkles-container"></div>
-        <h1 class="hero-title">Jadeworks</h1>
-        <div class="hero-subtitle-container">
-            <div class="profile-pic"><img src="Commission-Info/PFP.png" alt="Profile pic" /></div>
-            <p class="hero-subtitle">@jadeiya</p>
-        </div>
-    </div>
-
-    <div id="galleryVFXView" class="gallery-view"><div id="sceneVFX" class="scene"></div></div>
-    <div id="galleryModellingView" class="gallery-view"><div id="sceneModelling" class="scene"></div></div>
-    <div id="galleryBuildingView" class="gallery-view"><div id="sceneBuilding" class="scene"></div></div>
-
-    <div id="commissionInfoView" class="commission-view">
-        <div id="commissionSparkles" class="sparkles-container"></div>
-        <div class="orbit-container" id="orbitContainer">
-            <div class="orbit-ring"></div>
-            <div class="orbit-center">
-                <img src="Commission-Info/horse.png" alt="Center Orbit" class="orbit-center-img" />
-            </div>
-        </div>
-    </div>
-
-    <div id="dockHoverTrigger" class="dock-hover-trigger"></div>
-    <div id="iosIndicator" class="ios-indicator"></div>
-
-    <div class="dock-container" id="mainDock">
-        <div class="dock">
-            <button class="dock-item" onclick="switchView('landing')" aria-label="Home">
-                <span class="tooltip">Home</span>
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
-            </button>
-            <div class="dock-separator"></div>
-            <button class="dock-item" onclick="switchView('galleryVFX')" aria-label="VFX">
-                <span class="tooltip">VFX</span>
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z"></path></svg>
-            </button>
-            <button class="dock-item" onclick="switchView('galleryModelling')" aria-label="Modelling">
-                <span class="tooltip">Modelling</span>
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2-1-2 1M4 7l2-1M4 7l2 1M4 7v2.5M12 21l-2-1m2 1l2-1m-2 1v-2.5M6 18l-2-1v-2.5M18 18l2-1v-2.5"></path></svg>
-            </button>
-            <button class="dock-item" onclick="switchView('galleryBuilding')" aria-label="Building">
-                <span class="tooltip">Building</span>
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 21h18 M5 21V9a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v12 M5 17h14 M5 13h14 M9 21v-4 M15 21v-4 M12 17v-4 M9 13V9 M15 13V9"></path></svg>
-            </button>
-            <div class="dock-separator"></div>
-            <button class="dock-item" onclick="switchView('commissionInfo')" aria-label="Commission Info">
-                <span class="tooltip">Commission Info</span>
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
-            </button>
-        </div>
-    </div>
-
-    <div id="videoModal" class="video-modal">
-        <div class="video-container">
-            <button class="close-video" onclick="closeVideoModal()">
-                <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
-            </button>
-            <video id="modalVideo" controls playsinline></video>
-        </div>
-    </div>
-
-    <script>
-        // --- DATA & SETUP ---
-        
-        // TRUE = Renders 3D Gallery / FALSE = Renders "coming soon :)" text
-        const galleryToggles = {
-            VFX: true,
-            Modelling: false,
-            Building: false
-        };
-
-        const vfxData = [
-            { title: "0nian", sub: "VFX", img: "VFX-Photos/0nian.png", video: "Videos/0nian.mp4" },
-            { title: "Asminthia", sub: "VFX", img: "VFX-Photos/Asminthia.png", video: "Videos/Asminthia.mp4" },
-            { title: "Cobbore", sub: "VFX", img: "VFX-Photos/Cobbore.png", video: "Videos/Cobbore.mp4" },
-            { title: "Desolate", sub: "VFX", img: "VFX-Photos/Desolate.png", video: "Videos/Desolate.mp4" },
-            { title: "Ephemryst", sub: "VFX", img: "VFX-Photos/Ephemryst.png", video: "Videos/Ephemryst.mp4" },
-            { title: "Glitzar", sub: "VFX", img: "VFX-Photos/Glitzar.png", video: "Videos/Glitzar.mp4" },
-            { title: "IBLIS", sub: "VFX", img: "VFX-Photos/IBLIS.png", video: "Videos/IBLIS.mp4" },
-            { title: "Niosha", sub: "VFX", img: "VFX-Photos/Niosha.png", video: "Videos/Niosha.mp4" },
-            { title: "NOOPA", sub: "VFX", img: "VFX-Photos/NOOPA.png", video: "Videos/NOOPA.mp4" },
-            { title: "Psi", sub: "VFX", img: "VFX-Photos/Psi.png", video: "Videos/Psi.mp4" },
-            { title: "Quasar 618", sub: "VFX", img: "VFX-Photos/Quasar 618.png", video: "Videos/Quasar 618.mp4" },
-            { title: "Retina", sub: "VFX", img: "VFX-Photos/Retina.png", video: "Videos/Retina.mp4" },
-            { title: "Thermazine", sub: "VFX", img: "VFX-Photos/Thermazine.png", video: "Videos/Thermazine.mp4" },
-            { title: "Ultra Sinistral", sub: "VFX", img: "VFX-Photos/Ultra Sinistral.png", video: "Videos/Ultra Sinistral.mp4" },
-            { title: "Wishbone", sub: "VFX", img: "VFX-Photos/Wishbone.png", video: "Videos/Wishbone.mp4" },
-            { title: "Confluence", sub: "VFX", img: "VFX-Photos/Confluence.png", video: "Videos/Confluence.mp4" },
-            { title: "Y", sub: "VFX", img: "VFX-Photos/Y.png", video: "Videos/Y.mp4" }
-        ];
-
-        const modellingData = [
-            { title: "Ethereal Mesh", sub: "3D", img: "https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?auto=format&fit=crop&q=80&w=800", video: "https://www.w3schools.com/html/mov_bbb.mp4" }
-        ];
-
-        const buildingData = [
-            { title: "Brutalist Dawn", sub: "Structure", img: "https://images.unsplash.com/photo-1481126384218-5a083b4b087a?auto=format&fit=crop&q=80&w=800", video: "https://www.w3schools.com/html/mov_bbb.mp4" }
-        ];
-
-        // Animated icons
-        const clockIcon = `<div class="animated-clock"></div>`;
-        const gavelIcon = `<div class="animated-gavel"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M14 13l-6.5 6.5a2 2 0 0 1-2.828-2.828L11 10"/><path d="M14 13l4-4 2.5 2.5a1 1 0 0 0 1.414 0l1.5-1.5a1 1 0 0 0 0-1.414L16.5 2 15 3.5a1 1 0 0 0 0 1.414L17.5 7.5l-4 4"/></svg></div>`;
-        const truckIcon = `<div class="animated-truck"><svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect width="15" height="13" x="1" y="3" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></div>`;
-        const moneyIcon = `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="var(--jade-shine)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>`;
-
-        // Pricing Configuration
-        const pricingData = {
-            VFX: [
-                { name: "Single Aura", sub: "Standard Effect", normalPrice: "1,000", xtraPrice: "1,500", features: ["Single Particle Emitter", "Standard Roblox Lighting", "1 Revision Pass", "3-5 Day Turnaround"] },
-                { name: "Layered Impact", sub: "Complex Visuals", normalPrice: "3,000", xtraPrice: "4,500", features: ["Multiple Emitters", "Custom Mesh Deformers", "3 Revision Passes", "1-2 Week Turnaround"] },
-                { name: "Full Suite", sub: "Game VFX Overhaul", normalPrice: "10k+", xtraPrice: "15k+", features: ["Complete Visual Identity", "UI & Environment VFX", "Unlimited Revisions", "Priority Queue"] }
-            ],
-            Modelling: [
-                { name: "Prop Asset", sub: "Standard Object", normalPrice: "1,500", xtraPrice: "2,250", features: ["Static Mesh Modelling", "PBR Texturing (Roblox)", "1 Revision Pass", "3-5 Day Turnaround"] },
-                { name: "Character Rig", sub: "Playable/NPC", normalPrice: "5,000", xtraPrice: "7,500", features: ["Rigid/Skinned Mesh", "Standard Rigging", "3 Revision Passes", "2 Week Turnaround"] },
-                { name: "Full Scene", sub: "Environment Setup", normalPrice: "15k+", xtraPrice: "22k+", features: ["Full Map Assets/Assembly", "Optimized Level Design", "Unlimited Revisions", "Priority Queue"] }
-            ],
-            Building: [
-                { name: "Small Build", sub: "Lobby/House", normalPrice: "2,000", xtraPrice: "3,000", features: ["Assembly (External Assets)", "Roblox Material Setup", "1 Revision Pass", "3-5 Day Turnaround"] },
-                { name: "Medium Map", sub: "Arena/Dungeon", normalPrice: "6,000", xtraPrice: "9,000", features: ["Internal Layout/Flow", "Assembly & Lighting", "3 Revision Passes", "2 Week Turnaround"] },
-                { name: "Large World", sub: "Full Game Map", normalPrice: "20k+", xtraPrice: "30k+", features: ["Terrain Generation/Sculpting", "Full Assembly/Lighting", "Unlimited Revisions", "Priority Queue"] }
-            ]
-        };
-
-        // UI State for Pricing Card
-        let currentPricingCategory = null; 
-        let currentPricingMode = 'Normal';
-
-        const commissionData = [
-            { id: 1, title: "Terms of Service", titleIcon: gavelIcon, content: "<span style='color:var(--text-main);font-weight:600;'>1. Usage Rights</span><br>Usage rights for personal/commercial projects must be explicitly defined prior to the commission starting. Reselling or redistributing any delivered assets as your own is strictly prohibited unless formally agreed upon.<br><br><span style='color:var(--text-main);font-weight:600;'>2. Modifications & Revisions</span><br>Project deadlines will reset upon any unsolicited modifications requested mid-development. Major alterations requested after the initial draft phase will incur extra fees. Please purchase extra revision passes via the pricing tiers if you anticipate needing multiple changes.<br><br><span style='color:var(--text-main);font-weight:600;'>3. Payments & Refunds</span><br>Full refunds are only applicable before work begins. Partial refunds may be given mid-project based strictly on the percentage of completion. Absolutely no refunds will be provided after final delivery and approval.<br><br><span style='color:var(--text-main);font-weight:600;'>4. Delivery & Storage</span><br>All final files will be delivered in the agreed-upon formats (e.g., .obj, .fbx, .rbxm). Please securely back up your received files immediately, as I do not guarantee the long-term storage of project files after the commission is marked complete.", icon: `<svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>` },
-            { id: 2, title: "Pricing", titleIcon: moneyIcon, content: "", icon: `<svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M12 16v-1m-1-5.114V14H9"></path></svg>` },
-            { id: 3, title: "Timing", titleIcon: clockIcon, content: "Basic: 3-7 days. Advanced: 1-2 weeks. Full Game Packs: Projected within 3-4 weeks based on complexity.", icon: `<svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>` },
-            { id: 4, title: "Refunds", titleIcon: truckIcon, content: "Full refunds before work begins. Partial refunds mid-project based on completion. No refunds after delivery & approval.", icon: `<svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"></path></svg>` },
-            { id: 5, title: "About Me", content: "VFX Artist & 3D Modeler crafting immersive, high-fidelity visual experiences for Roblox.", icon: `<svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>` }
-        ];
-
-        // --- SPARKLE PARTICLE GENERATOR ---
-        function initSparkles(containerId) {
-            const container = document.getElementById(containerId);
-            if (!container) return;
-            
-            setInterval(() => {
-                // Only spawn sparkles if the parent view is active
-                if (!container.parentElement.classList.contains('active')) return;
-                
-                const sparkle = document.createElement('div');
-                sparkle.className = 'sparkle';
-                sparkle.style.left = Math.random() * 100 + '%';
-                sparkle.style.top = Math.random() * 100 + '%';
-                
-                // Randomize sizes slightly (must be big enough to show star points)
-                const size = Math.random() * 6 + 4; // 4px to 10px
-                sparkle.style.width = size + 'px';
-                sparkle.style.height = size + 'px';
-                
-                // Randomize twinkle speed
-                const duration = Math.random() * 2 + 1.5; 
-                sparkle.style.animationDuration = duration + 's';
-                
-                container.appendChild(sparkle);
-                
-                // Cleanup after animation completes
-                setTimeout(() => {
-                    if (container.contains(sparkle)) sparkle.remove();
-                }, duration * 1000);
-                
-            }, 200); // Speed of particle spawning
-        }
-
-        // Initialize sparkles in both views
-        initSparkles('landingSparkles');
-        initSparkles('commissionSparkles');
-
-        // --- VIDEO MODAL LOGIC ---
-        const videoModal = document.getElementById('videoModal');
-        const modalVideo = document.getElementById('modalVideo');
-
-        function openVideoModal(videoSrc) {
-            if (!videoSrc) return;
-            modalVideo.src = videoSrc;
-            videoModal.classList.add('active');
-            modalVideo.play();
-        }
-
-        function closeVideoModal() {
-            videoModal.classList.remove('active');
-            modalVideo.pause();
-            setTimeout(() => { modalVideo.src = ""; }, 400); 
-        }
-
-        videoModal.addEventListener('click', (e) => {
-            if (e.target === videoModal) closeVideoModal();
-        });
-
-
-        // --- VIEW SWITCHER ---
-        const views = {
-            landing: document.getElementById('landingView'),
-            galleryVFX: document.getElementById('galleryVFXView'),
-            galleryModelling: document.getElementById('galleryModellingView'),
-            galleryBuilding: document.getElementById('galleryBuildingView'),
-            commissionInfo: document.getElementById('commissionInfoView'),
-        };
-        let currentView = 'landing';
-        let tutorialPlayed = false;
-
-        function switchView(viewName) {
-            if (currentView === viewName) return;
-
-            Object.values(views).forEach(v => v.classList.remove('active', 'hidden'));
-
-            if (viewName === 'landing') {
-                views.landing.classList.add('active');
-            } else if (viewName in views) {
-                views[viewName].classList.add('active');
-                views.landing.classList.add('hidden');
-            }
-            currentView = viewName;
-            
-            if (viewName === 'commissionInfo') {
-                currentOrbitRadius = 0; // Trigger expansion animation
-            } else {
-                activeNodeId = null;
-                currentPricingCategory = null; 
-                updateNodesState();
-            }
-
-            // Hook into Dock Visibility Logic for Galleries & Commission Info
-            dockHoverTrigger.style.display = (currentView.startsWith('gallery') || currentView === 'commissionInfo') ? 'block' : 'none';
-            isHoveringDockArea = false; // reset hover state
-            applyDockState();
-
-            // Toggle Watermark overlay ONLY for galleries
-            const watermark = document.getElementById('watermarkOverlay');
-            if (viewName.startsWith('gallery')) {
-                watermark.classList.add('active');
-            } else {
-                watermark.classList.remove('active');
-            }
-
-            // Tutorial Overlay Logic
-            if (viewName.startsWith('gallery') && !tutorialPlayed) {
-                tutorialPlayed = true; 
-                setTimeout(() => {
-                    const tutorial = document.getElementById('tutorialOverlay');
-                    tutorial.classList.add('active');
-                    setTimeout(() => {
-                        tutorial.classList.remove('active');
-                    }, 1500); 
-                }, 500); 
-            }
-        }
-
-        // --- 3D GALLERY LOGIC ---
-        const radius = window.innerWidth > 768 ? 750 : 500;
-
-        function buildGallery(sceneId, data, categoryKey) {
-            const scene = document.getElementById(sceneId);
-            
-            // Check Backend Toggle before rendering
-            if (galleryToggles[categoryKey] === false) {
-                scene.innerHTML = '<div class="coming-soon">coming soon :)</div>';
-                return []; // Return empty array so animation loop doesn't crash
-            }
-            
-            const anglePerItem = 360 / data.length;
-            const cards = [];
-
-            data.forEach((item, index) => {
-                const card = document.createElement('div');
-                card.className = 'gallery-item';
-                const itemAngle = index * anglePerItem;
-                card.style.transform = `rotateY(${itemAngle}deg) translateZ(${radius}px)`;
-
-                card.innerHTML = `
-                    <img src="${item.img}" alt="${item.title}" draggable="false" />
-                    <div class="item-content">
-                        <h2 class="item-title">${item.title}</h2>
-                        <p class="item-subtitle">${item.sub}</p>
-                    </div>
-                `;
-                
-                card.addEventListener('click', () => {
-                    if (dragDistance < 5) {
-                        openVideoModal(item.video);
-                    }
-                });
-
-                scene.appendChild(card);
-                cards.push({ el: card, angle: itemAngle });
-            });
-            return cards;
-        }
-
-        const vfxCards = buildGallery('sceneVFX', vfxData, 'VFX');
-        const modellingCards = buildGallery('sceneModelling', modellingData, 'Modelling');
-        const buildingCards = buildGallery('sceneBuilding', buildingData, 'Building');
-
-        let currentRotation = { vfx: 22.5, modelling: 0, building: 0 };
-        let targetRotation = { vfx: 22.5, modelling: 0, building: 0 };
-        let isDragging = false;
-        let startX = 0;
-        let dragDistance = 0; 
-        let autoRotateSpeed = 0.08;
-
-        window.addEventListener('mousedown', dragStart);
-        window.addEventListener('mousemove', dragMove);
-        window.addEventListener('mouseup', dragEnd);
-        window.addEventListener('mouseleave', dragEnd);
-        window.addEventListener('touchstart', (e) => dragStart(e.touches[0]));
-        window.addEventListener('touchmove', (e) => dragMove(e.touches[0]));
-        window.addEventListener('touchend', dragEnd);
-        
-        window.addEventListener('wheel', (e) => {
-            if(currentView.startsWith('gallery')) {
-                const scene = currentView.substring(7).toLowerCase();
-                targetRotation[scene] += e.deltaY * 0.1;
-            }
-        });
-
-        function dragStart(e) {
-            if (!currentView.startsWith('gallery')) return;
-            isDragging = true;
-            startX = e.clientX;
-            dragDistance = 0; 
-            document.getElementById(`scene${currentView.substring(7)}`).style.cursor = 'grabbing';
-        }
-
-        function dragMove(e) {
-            if (!isDragging) return;
-            const delta = e.clientX - startX;
-            dragDistance += Math.abs(delta); 
-            const scene = currentView.substring(7).toLowerCase();
-            targetRotation[scene] += delta * 0.2;
-            startX = e.clientX;
-        }
-
-        function dragEnd() {
-            if (!currentView.startsWith('gallery')) return;
-            isDragging = false;
-            document.getElementById(`scene${currentView.substring(7)}`).style.cursor = 'grab';
-        }
-
-        // --- ORBITAL TIMELINE LOGIC ---
-        const orbitContainer = document.getElementById('orbitContainer');
-        const orbitNodes = [];
-        let orbitAngle = 0;
-        let targetOrbitAngle = 0;
-        let activeNodeId = null;
-        let isHoveringOrbitNode = false;
-        let currentOrbitRadius = 0;
-        const targetOrbitRadius = 250;
-
-        function getClosestAngle(current, target) {
-            let diff = (target - current) % 360;
-            if (diff > 180) diff -= 360;
-            if (diff < -180) diff += 360;
-            return current + diff;
-        }
-
-        // --- PRICING CARD SPECIFIC RENDERER ---
-        function renderPricingUI() {
-            const container = document.getElementById('pricing-dynamic-content');
-            const cardEl = document.getElementById('card-2');
-            if(!container || !cardEl) return;
-
-            const vfxSvg = `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z"></path></svg>`;
-            const modSvg = `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2-1-2 1M4 7l2-1M4 7l2 1M4 7v2.5M12 21l-2-1m2 1l2-1m-2 1v-2.5M6 18l-2-1v-2.5M18 18l2-1v-2.5"></path></svg>`;
-            
-            // New Building Brick Wall SVG
-            const bldSvg = `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 21h18 M5 21V9a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v12 M5 17h14 M5 13h14 M9 21v-4 M15 21v-4 M12 17v-4 M9 13V9 M15 13V9"></path></svg>`;
-
-            if (!currentPricingCategory) {
-                cardEl.classList.remove('expanded-pricing');
-                cardEl.classList.remove('expanded-pricing-height');
-                container.innerHTML = `
-                    <p style="font-size: 0.85rem; color: rgba(255,255,255,0.7); text-align:center; margin-bottom: 1.25rem;">Which category would you like to see my prices for?</p>
-                    <div class="pricing-mini-dock" style="flex-wrap: wrap;" onclick="event.stopPropagation()">
-                        <button onclick="setPricingCategory('VFX', event)">${vfxSvg} VFX</button>
-                        <button onclick="setPricingCategory('Modelling', event)">${modSvg} Model</button>
-                        <button onclick="setPricingCategory('Building', event)">${bldSvg} Build</button>
-                    </div>
-                `;
-                const titleEl = document.getElementById('dynamic-pricing-title');
-                if(titleEl) titleEl.innerHTML = `Pricing ${moneyIcon}`;
-                return;
-            }
-
-            cardEl.classList.add('expanded-pricing');
-            cardEl.classList.add('expanded-pricing-height');
-
-            const plans = pricingData[currentPricingCategory];
-            let tiersHTML = plans.map(plan => {
-                const price = currentPricingMode === 'Normal' ? plan.normalPrice : plan.xtraPrice;
-                const featuresHTML = plan.features.map(f => `
-                    <div class="feature-item">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-                        ${f}
-                    </div>
-                `).join('');
-
-                return `
-                    <div class="plan-tier-card">
-                        <div class="plan-header">
-                            <div class="plan-name-wrap">
-                                <h4>${plan.name}</h4>
-                                <p>${plan.sub}</p>
-                            </div>
-                            <div class="plan-price-wrap">
-                                <div class="plan-robux">${moneyIcon}${price}</div>
-                                <div class="plan-suffix">Robux</div>
-                            </div>
-                        </div>
-                        <div class="plan-divider"></div>
-                        <div class="plan-features">
-                            ${featuresHTML}
-                        </div>
-                        <button class="order-btn">Inquire</button>
-                    </div>
-                `;
-            }).join('');
-
-            // Contextual subtitle logic
-            const subtitleText = currentPricingMode === 'Normal' 
-                ? `My standard ${currentPricingCategory} creation process. Some revisions.` 
-                : `More revisions = final product! Takes some more time.`;
-
-            container.innerHTML = `
-                <div class="pricing-controls-row" style="align-items: flex-start;">
-                    <div class="pricing-mini-dock" onclick="event.stopPropagation()">
-                        <button class="${currentPricingCategory === 'VFX' ? 'active' : ''}" onclick="setPricingCategory('VFX', event)">${vfxSvg} VFX</button>
-                        <button class="${currentPricingCategory === 'Modelling' ? 'active' : ''}" onclick="setPricingCategory('Modelling', event)">${modSvg} Model</button>
-                        <button class="${currentPricingCategory === 'Building' ? 'active' : ''}" onclick="setPricingCategory('Building', event)">${bldSvg} Build</button>
-                    </div>
-
-                    <div style="flex: 1; display: flex; flex-direction: column;">
-                        <div class="pricing-toggle" data-mode="${currentPricingMode}" onclick="event.stopPropagation()">
-                            <div class="pricing-toggle-bg"></div>
-                            <button class="pricing-toggle-btn ${currentPricingMode === 'Normal' ? 'active' : ''}" onclick="setPricingMode('Normal', event)">Normal</button>
-                            <button class="pricing-toggle-btn ${currentPricingMode === 'Xtra' ? 'active' : ''}" onclick="setPricingMode('Xtra', event)">
-                                Extra Revisions
-                            </button>
-                        </div>
-                        <div class="pricing-mode-subtitle">${subtitleText}</div>
-                    </div>
-                </div>
-
-                <div class="plans-grid" onclick="event.stopPropagation()">
-                    ${tiersHTML}
-                </div>
-            `;
-            
-            const titleEl = document.getElementById('dynamic-pricing-title');
-            if(titleEl) titleEl.innerHTML = `${currentPricingCategory} Pricing ${moneyIcon}`;
-        }
-
-        window.setPricingCategory = function(cat, e) {
-            e.stopPropagation();
-            currentPricingCategory = cat;
-            renderPricingUI();
-        }
-
-        window.setPricingMode = function(mode, e) {
-            e.stopPropagation();
-            currentPricingMode = mode;
-            renderPricingUI();
-        }
-
-        // Build Orbit Nodes
-        commissionData.forEach((item, index) => {
-            const baseAngle = (index / commissionData.length) * 360;
-            
-            const wrapper = document.createElement('div');
-            wrapper.className = 'orbit-node-wrapper';
-
-            let innerCardContent = '';
-            if (item.id === 5) {
-                // About Me layout
-                innerCardContent = `
-                    <div class="profile-layout">
-                        <div class="profile-avatar">
-                            <img src="Commission-Info/PFP.png" alt="Profile Image" />
-                        </div>
-                        <h3 class="profile-name">@jadeiya</h3>
-                        <p class="profile-username">@VFX Artist, Modeller, & Builder</p>
-                        <p class="profile-desc">${item.content}</p>
-                    </div>
-                `;
-            } else if (item.id === 2) {
-                // Dynamic Pricing Layout
-                innerCardContent = `
-                    <h3 id="dynamic-pricing-title">${item.title} ${item.titleIcon || ''}</h3>
-                    <div id="pricing-dynamic-content"></div>
-                `;
-            } else {
-                // Default
-                innerCardContent = `
-                    <h3>${item.title} ${item.titleIcon || ''}</h3>
-                    <p>${item.content}</p>
-                `;
-            }
-
-            // Inject custom .tos-node and .tos-title classes if item.id === 1 (Terms of Service)
-            // Also inject .expanded-tos class directly to the card container
-            wrapper.innerHTML = `
-                <div class="orbit-node ${item.id === 1 ? 'tos-node' : ''}" id="node-${item.id}">
-                    ${item.icon}
-                    <div class="orbit-node-title ${item.id === 1 ? 'tos-title' : ''}">${item.title}</div>
-                </div>
-                <div class="orbit-card ${item.id === 1 ? 'expanded-tos' : ''}" id="card-${item.id}">
-                    ${innerCardContent}
-                </div>
-            `;
-
-            orbitContainer.appendChild(wrapper);
-
-            const nodeEl = wrapper.querySelector('.orbit-node');
-
-            nodeEl.addEventListener('mouseenter', () => isHoveringOrbitNode = true);
-            nodeEl.addEventListener('mouseleave', () => isHoveringOrbitNode = false);
-
-            nodeEl.addEventListener('click', (e) => {
-                e.stopPropagation();
-                if (activeNodeId === item.id) {
-                    activeNodeId = null; 
-                    targetOrbitAngle = orbitAngle; 
-                } else {
-                    activeNodeId = item.id; 
-                    const desiredAngle = 270 - baseAngle; 
-                    targetOrbitAngle = getClosestAngle(orbitAngle, desiredAngle);
-                    
-                    if(item.id === 2) renderPricingUI();
-                }
-                updateNodesState();
-            });
-
-            orbitNodes.push({ item, wrapper, baseAngle });
-        });
-
-        document.getElementById('commissionInfoView').addEventListener('click', (e) => {
-            if (e.target.id === 'commissionInfoView' || e.target.classList.contains('orbit-container') || e.target.classList.contains('orbit-ring')) {
-                activeNodeId = null;
-                targetOrbitAngle = orbitAngle; 
-                updateNodesState();
-            }
-        });
-
-        function updateNodesState() {
-            orbitNodes.forEach(node => {
-                const nodeEl = node.wrapper.querySelector('.orbit-node');
-                const cardEl = node.wrapper.querySelector('.orbit-card');
-                
-                nodeEl.classList.remove('expanded');
-                cardEl.classList.remove('active');
-
-                if (node.item.id === activeNodeId) {
-                    nodeEl.classList.add('expanded');
-                    cardEl.classList.add('active');
-                }
-            });
-
-            // Creative Fix: Shift the entire orbit system upwards when a card is open to make room!
-            const orbitContainer = document.getElementById('orbitContainer');
-            if (activeNodeId !== null) {
-                orbitContainer.style.transform = 'translateY(-12vh)';
-            } else {
-                orbitContainer.style.transform = 'translateY(0)';
-            }
-
-            // Dock Hiding Logic
-            applyDockState();
-        }
-
-        // --- RENDER LOOP ---
-        function animateScene(sceneId, targetRot, currentRot, cards) {
-            const scene = document.getElementById(sceneId);
-            
-            // Skip animation math entirely if the list of cards is empty (Backend Toggle check)
-            if (cards.length === 0) return;
-
-            if (!isDragging && currentView === sceneId.substring(5)) {
-                targetRot[sceneId.substring(5).toLowerCase()] -= autoRotateSpeed; 
-            }
-            currentRot[sceneId.substring(5).toLowerCase()] += (targetRot[sceneId.substring(5).toLowerCase()] - currentRot[sceneId.substring(5).toLowerCase()]) * 0.05;
-            scene.style.transform = `rotateY(${currentRot[sceneId.substring(5).toLowerCase()]}deg)`;
-
-            const normalizedTotal = currentRot[sceneId.substring(5).toLowerCase()] % 360;
-            cards.forEach(card => {
-                const relativeAngle = (card.angle + normalizedTotal + 360) % 360;
-                const absoluteAngle = Math.abs(relativeAngle > 180 ? 360 - relativeAngle : relativeAngle);
-                card.el.style.opacity = Math.max(0.15, 1 - (absoluteAngle / 150));
-            });
-        }
-
-        function animateOrbit() {
-            if (currentView === 'commissionInfo') {
-                currentOrbitRadius += (targetOrbitRadius - currentOrbitRadius) * 0.08;
-                
-                if (!activeNodeId && !isHoveringOrbitNode) {
-                    targetOrbitAngle += 0.2;
-                }
-                
-                orbitAngle += (targetOrbitAngle - orbitAngle) * 0.08;
-
-                const tiltFactor = 0.35; // Create 3D oval shape
-
-                orbitNodes.forEach(node => {
-                    const currentAngleRad = (node.baseAngle + orbitAngle) * (Math.PI / 180);
-                    
-                    const x = Math.cos(currentAngleRad) * currentOrbitRadius;
-                    // Apply tiltFactor to the Y axis to squash the circle into an oval
-                    const y = Math.sin(currentAngleRad) * (currentOrbitRadius * tiltFactor);
-                    
-                    // Calculate fake depth for 3D effect
-                    const depthScale = 0.85 + 0.15 * Math.sin(currentAngleRad);
-                    const zIndex = Math.round(100 + 50 * Math.sin(currentAngleRad));
-                    
-                    if (node.item.id !== activeNodeId) {
-                        node.wrapper.style.zIndex = zIndex;
-                        node.wrapper.style.transform = `translate(${x}px, ${y}px) scale(${depthScale})`;
-                        node.wrapper.querySelector('.orbit-node').style.transform = `translate(-50%, -50%)`;
-                    } else {
-                        node.wrapper.style.zIndex = 200; 
-                        node.wrapper.style.transform = `translate(${x}px, ${y}px) scale(1)`; 
-                    }
-                });
-            }
-        }
-
-        function animate() {
-            animateScene('sceneVFX', targetRotation, currentRotation, vfxCards);
-            animateScene('sceneModelling', targetRotation, currentRotation, modellingCards);
-            animateScene('sceneBuilding', targetRotation, currentRotation, buildingCards);
-            animateOrbit();
-            requestAnimationFrame(animate);
-        }
-
-        // --- DOCK AUTO-HIDE LOGIC ---
-        const mainDock = document.getElementById('mainDock');
-        const iosIndicator = document.getElementById('iosIndicator');
-        const dockHoverTrigger = document.getElementById('dockHoverTrigger');
-        let isHoveringDockArea = false;
-        let dockHideTimeout;
-
-        function applyDockState() {
-            if (currentView.startsWith('gallery') || (currentView === 'commissionInfo' && activeNodeId === null)) {
-                // Gallery Mode or Commission Mode (with no open node): Hide into white bar unless hovered
-                if (isHoveringDockArea) {
-                    mainDock.style.transform = 'translateX(-50%) translateY(0)';
-                    mainDock.style.opacity = '1';
-                    mainDock.style.pointerEvents = 'auto';
-                    iosIndicator.style.opacity = '0';
-                    iosIndicator.style.transform = 'translateX(-50%) translateY(20px)';
-                } else {
-                    mainDock.style.transform = 'translateX(-50%) translateY(150px)';
-                    mainDock.style.opacity = '0';
-                    mainDock.style.pointerEvents = 'none';
-                    iosIndicator.style.opacity = '1';
-                    iosIndicator.style.transform = 'translateX(-50%) translateY(0)';
-                }
-            } else if (currentView === 'commissionInfo' && activeNodeId !== null) {
-                // Commission Mode with an active node: Hide everything completely
-                iosIndicator.style.opacity = '0';
-                iosIndicator.style.transform = 'translateX(-50%) translateY(20px)';
-                mainDock.style.transform = 'translateX(-50%) translateY(150px)';
-                mainDock.style.opacity = '0';
-                mainDock.style.pointerEvents = 'none';
-            } else {
-                // Landing Page: Always show
-                iosIndicator.style.opacity = '0';
-                iosIndicator.style.transform = 'translateX(-50%) translateY(20px)';
-                mainDock.style.transform = 'translateX(-50%) translateY(0)';
-                mainDock.style.opacity = '1';
-                mainDock.style.pointerEvents = 'auto';
-            }
-        }
-
-        // Mouse enters the large bottom invisible trigger OR the dock itself
-        dockHoverTrigger.addEventListener('mouseenter', () => {
-            clearTimeout(dockHideTimeout);
-            isHoveringDockArea = true;
-            applyDockState();
-        });
-
-        mainDock.addEventListener('mouseenter', () => {
-            clearTimeout(dockHideTimeout);
-            isHoveringDockArea = true;
-            applyDockState();
-        });
-
-        // Mouse leaves the large bottom area
-        dockHoverTrigger.addEventListener('mouseleave', (e) => {
-            if (!mainDock.contains(e.relatedTarget)) {
-                isHoveringDockArea = false;
-                // Add a 400ms buffer so it doesn't disappear immediately if you accidentally swipe out
-                dockHideTimeout = setTimeout(() => {
-                    applyDockState();
-                }, 400);
-            }
-        });
-
-        mainDock.addEventListener('mouseleave', (e) => {
-            if (!dockHoverTrigger.contains(e.relatedTarget)) {
-                isHoveringDockArea = false;
-                dockHideTimeout = setTimeout(() => {
-                    applyDockState();
-                }, 400);
-            }
-        });
-
-        animate();
-    </script>
+<div id="jade-grove" aria-label="Jadeworks playful gallery">
+<header><button class="brand" data-view="work">jadeworks</button><nav aria-label="Main navigation"><button data-view="work" aria-pressed="true">Work</button><button data-view="commission" aria-pressed="false">Commissions</button></nav><span class="handle"><span>@johnmasterxx</span><img src="Commission-Info/PFP.png" alt="John’s profile picture" draggable="false"></span></header>
+<section class="work-view"><div class="browse"><div class="heading"><div><h1>Visual Effects</h1></div></div><div class="category-bar" aria-label="Portfolio categories"><button data-category="VFX" aria-pressed="true">VFX <span>17</span></button><button data-category="Models" aria-pressed="false">Models</button><span class="tab-line" aria-hidden="true"></span></div>
+<div class="gallery" role="region" aria-label="3D portfolio gallery"><p class="first-scroll-hint">mouse scroll or hold click + swipe to see through galleries!</p><div class="ring"></div><div class="empty" hidden><span class="sprout" aria-hidden="true">✳</span><h2>Still growing.</h2><p>Modelling creations are coming soon :)</p></div></div>
+<div class="carousel-dots" role="img" aria-label="Creation position"></div><div class="gallery-bottom"><div class="active-title" aria-live="polite"><p class="eyebrow"><span class="current-category">VFX</span> / <span class="count">03 — 17</span></p><h2 class="project-name">Y</h2></div><button class="open-project">look closer</button><div class="arrows"><button class="previous" aria-label="Previous creation">←</button><button class="next" aria-label="Next creation">→</button></div></div></div>
+<section class="detail" hidden aria-label="Creation preview"><div class="detail-top"><button class="back">back</button><div class="media-tabs"><button data-media="image" aria-pressed="true">Image</button><button data-media="video" aria-pressed="false">Video preview</button></div></div><div class="media-space"><div class="media-frame"><div class="still-layer"><img class="detail-image" alt=""><div class="watermarks" aria-hidden="true"></div></div><div class="video-layer" hidden><p class="coming-video">coming soon</p><video class="actual-video" controls controlslist="nodownload noremoteplayback" disablepictureinpicture playsinline hidden></video></div></div></div><div class="detail-caption"><h2></h2><p class="media-note">VFX · Image preview</p></div></section></section>
+<section class="commission-view" hidden><div class="heading"><div><h1>commission info</h1></div></div><div class="grove-layout"><div class="tree-stage" aria-label="Commission tree navigation"><div class="tree-sway"><svg class="botanical-tree" viewBox="0 0 400 460" preserveAspectRatio="none" aria-hidden="true">
+<g class="wood" fill="none" stroke="currentColor" stroke-linecap="round">
+<path d="M193 460 L193 430 C205 376 181 329 199 270 C215 219 189 177 202 116 C211 82 203 59 200 40" stroke-width="3"/>
+<path d="M203.795 246 C175 214 142 218 118 186 C106 168 93 159 80 156 M202.785 207 C227 182 260 201 286 177 C307 156 319 160 328 144 M192.878 341 C161 318 131 330 110 304 C98 289 87 284 72 287 M194.649 362 C232 339 248 349 277 334 C303 322 308 310 326 307" stroke-width="2"/>
+<path d="M199.270 133 C173 117 154 113 146 91 M204.741 103 C232 91 240 71 247 55 M147 210 C150 190 138 172 127 164 M273 188 C269 168 277 150 291 141 M135 322 C132 344 118 351 105 357 M264 340 C264 365 280 380 292 387 M193 429 C177 433 164 436 152 439 M193 429 C207 438 220 440 235 441" stroke-width="1.3"/>
+</g>
+<g class="foliage" fill="currentColor">
+<path d="M147 95 Q113 97 124 66 Q148 69 147 95Z"/>
+<path d="M241 76 Q240 44 263 42 Q269 67 241 76Z"/><path d="M205 103 Q182 88 188 65 Q214 76 205 103Z"/>
+<path d="M130 177 Q102 181 103 156 Q128 149 130 177Z"/><path d="M290 147 Q280 124 306 112 Q313 138 290 147Z"/>
+<path d="M179 228 Q154 224 160 201 Q187 205 179 228Z"/><path d="M215 254 Q214 228 239 223 Q242 249 215 254Z"/>
+<path d="M139 332 Q111 326 113 307 Q135 305 139 332Z"/><path d="M105 356 Q82 350 79 372 Q102 379 105 356Z"/>
+<path d="M275 372 Q273 394 296 404 Q306 379 275 372Z"/><path d="M208 393 Q218 364 237 373 Q237 394 208 393Z"/>
+</g></svg>
+<div class="tree-art" aria-hidden="true"><div class="trunk"></div><div class="branch b1"></div><div class="branch b2"></div><div class="branch b3"></div><div class="branch b4"></div><i class="leaf l1"></i><i class="leaf l2"></i><i class="leaf l3"></i><i class="leaf l4"></i><span class="tree-ground">✧</span></div><nav class="tree-nav" aria-label="Commission information"><button data-info="Pricing" style="--x:50%;--y:12%">Pricing</button><button data-info="Terms of Service" style="--x:23%;--y:36%">Terms of Service</button><button data-info="Timing" style="--x:78%;--y:43%">Timing</button><button data-info="Refunds" style="--x:22%;--y:66%">Refunds</button><button data-info="About Me" style="--x:76%;--y:75%">About Me</button></nav></div></div><article class="info-content" hidden><h2></h2><div class="info-body"></div></article></div></section>
+</div>
+
+<style>
+
+#jade-grove{--jo-bg:light-dark(#f0f3ee,#090f0c);--jo-ink:light-dark(#192d23,#e7efe9);--jo-muted:light-dark(#56685d,#9cad9f);--jo-line:light-dark(#ccd7ce,#263b2e);--jo-accent:light-dark(#2b6545,#b2dfbf);background:var(--jo-bg);color:var(--jo-ink);font-family:'Josefin Sans','Trebuchet MS',sans-serif;padding:0 36px;position:relative;overflow:hidden}#jade-grove *{box-sizing:border-box}#jade-grove [hidden]{display:none!important}#jade-grove button{font:inherit;color:inherit}#jade-grove header{min-height:80px;display:flex;align-items:center;justify-content:space-between;gap:16px;border-bottom:1px solid var(--jo-line)}#jade-grove .brand{font:28px 'Fraunces',Georgia,serif;letter-spacing:-1.2px;border:0;padding:0;background:none}#jade-grove .brand span{font:11px Arial;vertical-align:super;margin-left:3px}#jade-grove nav{display:flex;gap:6px}#jade-grove header nav button{border:0;background:none;padding:11px 17px;border-radius:30px;font-size:13px;color:var(--jo-muted)}#jade-grove header nav button[aria-pressed=true]{background:var(--jo-ink);color:var(--jo-bg)}#jade-grove .handle{font-size:12px;color:var(--jo-muted)}#jade-grove .heading{display:flex;justify-content:space-between;align-items:end;padding:34px 0 28px;gap:20px}#jade-grove .eyebrow{font-size:10px;letter-spacing:1.9px;color:var(--jo-accent);margin:0 0 12px}#jade-grove h1{font:normal clamp(30px,4.8vw,48px)/1.1 'Fraunces',Georgia,serif;letter-spacing:-1.5px;margin:0}#jade-grove .byline{font-size:12px;line-height:1.6;color:var(--jo-muted);margin:0}#jade-grove .category-bar{display:flex;gap:24px;align-items:center;border-bottom:1px solid var(--jo-line)}#jade-grove .category-bar button{background:none;border:0;border-bottom:2px solid transparent;padding:13px 0;font-size:13px;color:var(--jo-muted)}#jade-grove .category-bar button[aria-pressed=true]{border-bottom-color:var(--jo-accent);color:var(--jo-ink)}#jade-grove .category-bar button span{font-size:10px;margin-left:5px;color:var(--jo-muted)}#jade-grove .collection{margin-left:auto;letter-spacing:1.8px;font-size:9px;color:var(--jo-muted)}#jade-grove .gallery{height:398px;position:relative;margin:0 -36px;overflow:hidden;touch-action:pan-y;user-select:none;background:radial-gradient(ellipse at 50% 55%,color-mix(in srgb,var(--jo-accent) 9%,transparent),transparent 70%)}#jade-grove .ring{position:absolute;inset:0;perspective:1100px}#jade-grove .creation{position:absolute;left:50%;top:38px;width:31%;max-width:292px;height:320px;padding:0;border:1px solid #53786060;border-radius:9px;overflow:hidden;background:#080d0a;transform-origin:center;will-change:transform,opacity;box-shadow:0 20px 38px #00000028}#jade-grove .creation img{width:100%;height:100%;object-fit:cover;pointer-events:none}#jade-grove .creation:after{content:'';position:absolute;inset:0;background:linear-gradient(transparent 60%,#031009c9)}#jade-grove .creation-label{position:absolute;bottom:18px;left:18px;z-index:1;font:22px 'Fraunces',Georgia,serif;color:#edf6ee}#jade-grove .watermarks{position:absolute;inset:-80px;pointer-events:none;overflow:hidden;z-index:10;opacity:.105;transform:rotate(-23deg);color:var(--jo-ink);font-size:17px;font-weight:500;letter-spacing:2px;line-height:86px;white-space:nowrap}#jade-grove .watermarks>div{width:max-content;animation:jo-watermark 32s linear infinite}#jade-grove .watermarks span{display:inline-block;padding-right:70px}#jade-grove .gallery-bottom{display:flex;align-items:center;gap:24px;border-top:1px solid var(--jo-line);padding:22px 0 0}#jade-grove h2{font:normal 29px 'Fraunces',Georgia,serif;letter-spacing:-.5px;margin:0}#jade-grove .active-title{min-width:140px}#jade-grove .open-project,#jade-grove .back{background:none;border:1px solid var(--jo-line);border-radius:30px;padding:12px 18px;font-size:12px}#jade-grove .open-project{margin-left:auto}#jade-grove .arrows{display:flex;gap:8px}#jade-grove .arrows button{width:44px;height:44px;border:1px solid var(--jo-line);border-radius:50%;background:none;transition:background 180ms,transform 180ms}#jade-grove .arrows button:active{transform:scale(.93)}#jade-grove .arrows button:hover{background:color-mix(in srgb,var(--jo-accent) 12%,transparent)}#jade-grove .gesture-hint{font-size:11px;color:var(--jo-muted);margin:20px 0 0}#jade-grove footer{display:flex;justify-content:space-between;gap:16px;border-top:1px solid var(--jo-line);padding:20px 0;margin-top:28px;color:var(--jo-muted);font-size:11px}#jade-grove .empty{padding:110px 30px;text-align:center}#jade-grove .empty p:last-child{color:var(--jo-muted);font-size:14px}#jade-grove .commission-layout{display:grid;grid-template-columns:170px 1fr;gap:36px;min-height:510px}#jade-grove .commission-nav{display:flex;flex-direction:column;align-items:stretch;gap:5px}#jade-grove .commission-nav button{background:none;border:0;text-align:left;padding:13px 12px;color:var(--jo-muted);font-size:13px;border-radius:5px}#jade-grove .commission-nav button[aria-pressed=true]{background:color-mix(in srgb,var(--jo-accent) 13%,var(--jo-bg));color:var(--jo-ink)}#jade-grove .info-content{min-width:0;padding:8px 0 24px}#jade-grove .info-body{font-size:13px;line-height:1.75;color:var(--jo-muted);margin-top:20px}#jade-grove .info-body ul{padding-left:20px}#jade-grove .info-body li{margin-bottom:14px}#jade-grove .pricing-controls{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0}#jade-grove select{color:var(--jo-ink);background:var(--jo-bg);border:1px solid var(--jo-line);padding:10px;border-radius:5px;font-size:13px;max-width:100%}#jade-grove .tier{border-top:1px solid var(--jo-line);padding:18px 0}#jade-grove .tier-head{display:flex;justify-content:space-between;gap:16px;color:var(--jo-ink);font-size:16px}#jade-grove .tier p{margin:7px 0 0}#jade-grove .detail{padding:25px 0}#jade-grove .detail-art{position:relative;overflow:hidden;margin:20px 0;background:#080d0a;border-radius:8px}#jade-grove .detail-art img{width:100%;height:410px;object-fit:contain;display:block}#jade-grove .detail-art .watermarks{color:#d3e6d9}#jade-grove .detail p{font-size:12px;color:var(--jo-muted)}
+@keyframes jo-watermark{to{transform:translateX(-192px)}}
+@media(max-width:600px){#jade-grove{padding:0 18px}#jade-grove .handle,#jade-grove .byline,#jade-grove .collection{display:none}#jade-grove header{gap:8px}#jade-grove .brand{font-size:23px}#jade-grove header nav button{padding:12px 10px;font-size:12px}#jade-grove .heading{padding:28px 0}#jade-grove .category-bar{gap:24px}#jade-grove .gallery{margin:0 -18px;height:348px}#jade-grove .creation{width:57%;height:278px;top:34px}#jade-grove .gallery-bottom{gap:12px;flex-wrap:wrap}#jade-grove .active-title{min-width:110px;flex:1}#jade-grove .open-project{order:3;width:100%}#jade-grove .commission-layout{grid-template-columns:1fr;gap:20px}#jade-grove .commission-nav{flex-direction:row;flex-wrap:wrap}#jade-grove .commission-nav button{padding:12px}#jade-grove .detail-art img{height:300px}#jade-grove .gesture-hint{line-height:1.6}}
+@media(prefers-reduced-motion:reduce){#jade-grove *{animation:none!important;transition:none!important}}
+
+#jade-grove{padding-bottom:26px;font-family:'Josefin Sans','Trebuchet MS',sans-serif}#jade-grove h1,#jade-grove h2,#jade-grove .brand,#jade-grove .creation-label{font-family:'Fraunces',Georgia,serif}#jade-grove .brand{font-size:29px}#jade-grove header nav button,#jade-grove .open-project,#jade-grove .back,#jade-grove .arrows button{border-radius:7px 3px 8px 3px}#jade-grove .heading{padding:32px 0 25px}#jade-grove h1{font-size:clamp(29px,4.5vw,45px);letter-spacing:-1.6px}#jade-grove .title-star{display:inline-block;margin-left:14px;color:var(--jo-accent);font-size:27px;transform:rotate(-12deg)}#jade-grove .category-bar{position:relative;gap:28px}#jade-grove .category-bar button{border:0;font-size:15px;min-height:44px}#jade-grove .tab-line{position:absolute;left:0;bottom:-1px;height:2px;width:48px;background:var(--jo-accent);transition:transform 260ms cubic-bezier(.2,.8,.2,1),width 260ms}#jade-grove .gallery{height:414px}#jade-grove .creation{top:44px;height:320px;width:26%;max-width:250px;border:0;overflow:visible;background:none;box-shadow:none;perspective:1000px}#jade-grove .creation:after{display:none}#jade-grove .creation-inner{position:absolute;inset:0;background:#080e0b;border:1px solid #9cc6ad55;border-radius:7px 11px 5px 9px;overflow:hidden;box-shadow:0 15px 30px #00000030;transform:scale(1);transition:transform 280ms cubic-bezier(.18,.8,.2,1),box-shadow 280ms}#jade-grove .creation.focus-grow .creation-inner{transform:scale(var(--focus-grow,1.065)) translateY(-3px);box-shadow:0 19px 42px #00000050,0 0 0 1px #aac9b05e}#jade-grove .creation-inner:after{content:'';position:absolute;inset:0;background:linear-gradient(transparent 60%,#031009d9);pointer-events:none}#jade-grove .creation img{object-fit:cover}#jade-grove .creation-label{font-size:20px;z-index:12}#jade-grove .watermarks{inset:-90px;transform:rotate(-23deg);color:#e2f3e9;opacity:.13;font-family:'Josefin Sans',sans-serif;line-height:78px;font-size:15px;letter-spacing:1px}#jade-grove .watermarks>div{width:max-content;animation:grove-watermark 24s linear infinite}#jade-grove .watermarks .wm-row{display:flex}#jade-grove .watermarks span{width:180px;flex:0 0 180px;padding:0;display:block}#jade-grove .gallery-bottom{padding-top:22px}#jade-grove .open-project{font-size:14px;min-height:44px}#jade-grove .gesture-hint{font-size:12px}#jade-grove .empty{padding:80px 20px}#jade-grove .sprout{font-size:50px;color:var(--jo-accent);display:block;margin-bottom:22px}#jade-grove .detail-top{display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap}#jade-grove .media-tabs{display:flex;gap:7px}#jade-grove .media-tabs button,#jade-grove .play-toggle{background:none;color:var(--jo-muted);border:1px solid var(--jo-line);padding:12px 15px;border-radius:5px;font-size:13px}#jade-grove .media-tabs button[aria-pressed=true]{background:var(--jo-ink);color:var(--jo-bg)}#jade-grove .media-space{display:flex;justify-content:center;align-items:flex-start;margin:26px 0 22px;min-height:300px}#jade-grove .media-frame{position:relative;overflow:hidden;background:#07100b;border:1px solid var(--jo-line);border-radius:8px;flex:none;max-width:100%;transform-origin:center}#jade-grove .still-layer,#jade-grove .video-layer{position:absolute;inset:0}#jade-grove .detail-image{width:100%;height:100%;object-fit:fill;display:block}#jade-grove .detail-caption{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}#jade-grove .detail-caption p{font-size:14px}#jade-grove .pretend-scene{position:absolute;inset:0;overflow:hidden;background:#07100b}#jade-grove .pretend-scene img{width:100%;height:100%;object-fit:cover;animation:grove-demo 8s ease-in-out infinite alternate;filter:saturate(1.12)}#jade-grove .video-label{position:absolute;top:18px;left:18px;color:#e0f5e8;font-size:10px;letter-spacing:2px;background:#09170ed9;padding:8px}#jade-grove .video-controls{position:absolute;bottom:0;left:0;right:0;padding:10px 14px;display:flex;align-items:center;gap:12px;background:#07110deb;color:#d9ebdf;font-size:11px}#jade-grove .play-toggle{color:#d9ebdf;border-color:#476652;padding:8px;min-height:40px}#jade-grove .video-track{height:3px;background:#3c5445;flex:1}#jade-grove .video-track span{display:block;height:100%;background:#bee5c8;width:0}#jade-grove .grove-layout{display:grid;grid-template-columns:minmax(290px,.9fr) minmax(0,1fr);gap:30px;align-items:start}#jade-grove .tree-stage{height:450px;position:relative}#jade-grove .tree-sway{height:410px;position:relative;transform-origin:50% 96%;animation:grove-sway 7s ease-in-out infinite alternate}#jade-grove .tree-stage:hover .tree-sway,#jade-grove .tree-stage:focus-within .tree-sway{animation-play-state:paused}#jade-grove .tree-art{position:absolute;inset:0;color:var(--jo-accent);opacity:.55}#jade-grove .trunk{position:absolute;bottom:5%;left:49%;height:82%;width:18px;border-left:3px solid currentColor;border-radius:50%;transform:rotate(4deg)}#jade-grove .branch{position:absolute;left:50%;width:30%;height:72px;border-bottom:2px solid currentColor;border-radius:0 0 80% 0;transform-origin:left bottom}#jade-grove .b1{top:27%;transform:rotate(202deg);width:28%}#jade-grove .b2{top:30%;transform:rotate(-25deg);width:32%}#jade-grove .b3{top:53%;transform:rotate(195deg);width:29%}#jade-grove .b4{top:63%;transform:rotate(-20deg);width:29%}#jade-grove .leaf{position:absolute;width:20px;height:9px;border:1px solid currentColor;border-radius:100% 0 100% 0;background:color-mix(in srgb,var(--jo-accent) 15%,transparent)}#jade-grove .l1{left:43%;top:23%;transform:rotate(20deg)}#jade-grove .l2{left:59%;top:32%;transform:rotate(-25deg)}#jade-grove .l3{left:37%;top:57%;transform:rotate(35deg)}#jade-grove .l4{left:62%;top:69%;transform:rotate(-40deg)}#jade-grove .tree-ground{position:absolute;left:46%;bottom:0;font-size:30px}#jade-grove .tree-nav{display:block}#jade-grove .tree-nav button{position:absolute;left:var(--x);top:var(--y);transform:translate(-50%,-50%);width:138px;min-height:64px;padding:12px 9px;border:1px solid var(--jo-line);background:var(--jo-bg);border-radius:16px 5px 18px 5px;font-family:'Fraunces',Georgia,serif;font-size:15px;box-shadow:0 4px 0 color-mix(in srgb,var(--jo-line) 45%,transparent);transition:background 180ms,border-color 180ms}#jade-grove .tree-nav button span{display:block;font:11px 'Josefin Sans',sans-serif;margin-top:6px;color:var(--jo-muted)}#jade-grove .tree-nav button:hover,#jade-grove .tree-nav button[aria-pressed=true]{background:color-mix(in srgb,var(--jo-accent) 12%,var(--jo-bg));border-color:var(--jo-accent)}#jade-grove .tree-hint{text-align:center;font-size:12px;color:var(--jo-muted)}#jade-grove .info-content{background:color-mix(in srgb,var(--jo-accent) 4%,var(--jo-bg));border:1px solid var(--jo-line);border-radius:5px 26px 6px 22px;padding:28px;min-height:250px;margin-top:22px;transform-origin:top left}#jade-grove .info-body{font-size:14px;line-height:1.65}#jade-grove .info-content h2{font-size:29px}#jade-grove select{font-family:inherit;font-size:14px}#jade-grove .tier-head{font-family:'Fraunces',Georgia,serif}#jade-grove .pricing-controls label{display:flex;flex-direction:column;gap:4px;flex:1}#jade-grove .tier{border-top:1px dashed var(--jo-line)}
+@keyframes grove-watermark{to{transform:translateX(-180px)}}@keyframes grove-sway{from{transform:rotate(-.9deg)}to{transform:rotate(.9deg)}}@keyframes grove-demo{from{transform:scale(1.04) translateX(-1%)}to{transform:scale(1.17) translateX(1%)}}
+@media(max-width:650px){#jade-grove .grove-layout{grid-template-columns:1fr;gap:0}#jade-grove .tree-stage{max-width:420px;width:100%;margin:auto;height:400px}#jade-grove .tree-sway{height:365px}#jade-grove .tree-nav button{width:124px;font-size:13px}#jade-grove .info-content{margin-top:10px;padding:22px}#jade-grove .creation{width:43%;height:264px;top:42px}#jade-grove .gallery{height:360px}#jade-grove .title-star{font-size:22px;margin-left:9px}#jade-grove .media-space{min-height:180px}#jade-grove .video-controls{gap:7px;padding:6px 8px}#jade-grove .video-label{font-size:8px;letter-spacing:1px}#jade-grove .detail-top{gap:16px}#jade-grove .media-tabs{width:100%}#jade-grove .detail-caption{gap:4px}#jade-grove .detail-caption p{margin:8px 0}#jade-grove .brand{font-size:25px}#jade-grove .heading{padding:28px 0 24px}}
+@media(prefers-reduced-motion:reduce){#jade-grove *{animation:none!important;transition:none!important}}
+
+
+#jade-grove .heading{padding:36px 0 28px}#jade-grove .carousel-dots{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin:0 0 19px;min-height:7px}#jade-grove .carousel-dots span{width:5px;height:5px;border-radius:50%;background:var(--jo-line);transition:background 160ms,transform 180ms}#jade-grove .carousel-dots span.active{background:var(--jo-accent);transform:scale(1.5)}#jade-grove .creation-inner{transition:transform 280ms cubic-bezier(.18,.8,.2,1),filter 180ms,box-shadow 280ms}#jade-grove .ring.is-settled .creation:not(.focus-grow) .creation-inner{filter:brightness(.78)}#jade-grove .grove-layout{display:block}#jade-grove .tree-stage{width:100%;max-width:none;height:195px;margin:0 0 12px}#jade-grove .tree-sway{height:180px;animation:none}#jade-grove .tree-art{opacity:.65;animation:none;transform-origin:50% 100%}#jade-grove .tree-stage:hover .tree-art,#jade-grove .tree-stage:focus-within .tree-art{animation-play-state:paused}#jade-grove .tree-art>*{display:none}#jade-grove .tree-art:before{content:'';position:absolute;left:50%;top:0;width:1px;height:64px;background:var(--jo-accent)}#jade-grove .tree-art:after{content:'';position:absolute;left:10%;right:10%;top:40px;height:25px;border:1px solid var(--jo-accent);border-bottom:0;border-radius:35px 35px 0 0}#jade-grove .tree-nav button{top:108px!important;left:var(--node)!important;min-height:51px;width:151px;border-radius:8px 18px 8px 18px;font-size:16px;box-shadow:0 3px 0 color-mix(in srgb,var(--jo-line) 45%,transparent)}#jade-grove .tree-nav button:before{content:'';position:absolute;left:50%;bottom:calc(100% + 1px);height:43px;width:1px;background:var(--jo-accent);opacity:.65}#jade-grove .tree-nav button:nth-child(1){--node:10%}#jade-grove .tree-nav button:nth-child(2){--node:30%}#jade-grove .tree-nav button:nth-child(3){--node:50%}#jade-grove .tree-nav button:nth-child(4){--node:70%}#jade-grove .tree-nav button:nth-child(5){--node:90%}#jade-grove .tree-hint{margin:0}#jade-grove .info-content{max-width:780px;margin:0 auto;padding:30px 34px}#jade-grove .info-content.pricing-page{max-width:none;border:0;background:none;padding:6px 0 20px;border-radius:0}#jade-grove .pricing-page>h2{text-align:center;font-size:35px}#jade-grove .price-switches{display:flex;justify-content:center;gap:20px;flex-wrap:wrap;margin:22px 0 18px}#jade-grove .segmented{position:relative;display:flex;background:color-mix(in srgb,var(--jo-accent) 7%,var(--jo-bg));border:1px solid var(--jo-line);padding:4px;border-radius:7px;isolation:isolate}#jade-grove .segmented button{border:0;background:none;padding:12px 24px;min-height:44px;font-family:inherit;color:var(--jo-muted);font-size:14px;z-index:1}#jade-grove .segmented button[aria-pressed=true]{color:var(--jo-bg)}#jade-grove .segment-thumb{position:absolute;top:4px;bottom:4px;left:4px;background:var(--jo-ink);border-radius:4px;transition:transform 260ms cubic-bezier(.18,1.3,.3,1),width 260ms cubic-bezier(.18,1.3,.3,1)}#jade-grove .process-note{text-align:center;margin:0 0 24px;min-height:24px}#jade-grove .plans{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}#jade-grove .plan{position:relative;border:1px solid var(--jo-line);border-radius:7px 20px 7px 20px;background:color-mix(in srgb,var(--jo-accent) 4%,var(--jo-bg));padding:26px 24px 20px;overflow:hidden}#jade-grove .plan-number{font-size:11px;letter-spacing:2px;color:var(--jo-accent)}#jade-grove .plan h3{font:25px 'Fraunces',Georgia,serif;color:var(--jo-ink);margin:12px 0 6px}#jade-grove .plan-sub{font-size:12px;margin:0 0 24px}#jade-grove .plan-price{font:35px 'Fraunces',Georgia,serif;color:var(--jo-ink);letter-spacing:-1.5px;white-space:nowrap}#jade-grove .plan-price small{font:11px 'Josefin Sans',sans-serif;margin-left:7px;letter-spacing:1px;color:var(--jo-muted)}#jade-grove .robux-price{font-size:12px;margin:8px 0 18px}#jade-grove .robux-price span{display:block;font-size:11px}#jade-grove .plan ul{border-top:1px solid var(--jo-line);padding:20px 0 0;list-style:none;min-height:132px;margin:0}#jade-grove .plan li{font-size:13px;margin:0 0 10px;padding-left:16px;position:relative}#jade-grove .plan li:before{content:'·';position:absolute;left:0;color:var(--jo-accent)}#jade-grove .plan-process{font-size:11px;display:block;padding-top:13px;border-top:1px solid var(--jo-line)}#jade-grove .payment-note{text-align:center;font-size:12px;line-height:1.65;margin:23px 0 0}#jade-grove .price-empty{grid-column:1/-1;text-align:center;padding:80px 20px;min-height:360px}#jade-grove .price-empty h3{font:30px 'Fraunces',Georgia,serif;color:var(--jo-ink)}
+@media(max-width:700px){#jade-grove .tree-stage{height:300px}#jade-grove .tree-sway{height:265px}#jade-grove .tree-nav button{width:42%;top:var(--mobile-y)!important;left:var(--mobile-x)!important;min-height:52px;font-size:14px}#jade-grove .tree-nav button:nth-child(1){--mobile-x:50%;--mobile-y:35px}#jade-grove .tree-nav button:nth-child(2){--mobile-x:24%;--mobile-y:122px}#jade-grove .tree-nav button:nth-child(3){--mobile-x:76%;--mobile-y:122px}#jade-grove .tree-nav button:nth-child(4){--mobile-x:24%;--mobile-y:209px}#jade-grove .tree-nav button:nth-child(5){--mobile-x:76%;--mobile-y:209px}#jade-grove .tree-art:before{height:208px;top:20px}#jade-grove .tree-art:after{left:24%;right:24%;top:85px;height:124px;border-radius:12px;border:1px solid var(--jo-accent)}#jade-grove .tree-nav button:before{display:none}#jade-grove .plans{grid-template-columns:1fr}#jade-grove .plan{padding:24px}#jade-grove .plan ul{min-height:0}#jade-grove .plan-sub{margin-bottom:15px}#jade-grove .info-content{padding:24px}#jade-grove .segmented button{padding:12px 16px}#jade-grove .price-switches{gap:12px}#jade-grove .category-bar{gap:25px}}
+#jade-grove{text-transform:lowercase}#jade-grove .info-body{text-transform:none}#jade-grove .back{text-transform:lowercase}#jade-grove .grove-layout{display:grid;grid-template-columns:minmax(260px,.82fr) minmax(0,1.8fr);gap:26px;align-items:start}#jade-grove .tree-stage{height:470px;margin:0;max-width:400px}#jade-grove .tree-sway{height:460px}#jade-grove .tree-art{display:none}#jade-grove .botanical-tree{position:absolute;inset:0;width:100%;height:100%;color:var(--jo-accent);opacity:.65;transform-origin:50% 94%;animation:leaf-sway 9s ease-in-out infinite alternate;overflow:visible}#jade-grove .botanical-tree .foliage{opacity:.35}#jade-grove .tree-stage:hover .botanical-tree,#jade-grove .tree-stage:focus-within .botanical-tree{animation-play-state:paused}#jade-grove .tree-nav button{left:var(--x)!important;top:var(--y)!important;width:44%;max-width:146px;min-height:53px;font-size:14px;padding:11px 7px;border-radius:17px 5px 18px 5px;box-shadow:0 3px 0 color-mix(in srgb,var(--jo-line) 45%,transparent)}#jade-grove .tree-nav button:before{display:none}#jade-grove .info-content{margin:12px 0 0;max-width:none;padding:27px;container-type:inline-size}#jade-grove .info-content.pricing-page{border:1px solid var(--jo-line);border-radius:6px 23px 6px 23px;padding:24px 20px;background:color-mix(in srgb,var(--jo-accent) 3%,var(--jo-bg))}#jade-grove .pricing-page>h2{text-align:left;font-size:30px}#jade-grove .price-switches{justify-content:flex-start;gap:12px;margin:18px 0}#jade-grove .segmented button{padding:10px 14px;font-size:13px}#jade-grove .segment-thumb{transition:transform 210ms cubic-bezier(.2,.7,.2,1),width 210ms cubic-bezier(.2,.7,.2,1)}#jade-grove .process-note{text-align:left;font-size:13px;margin-bottom:18px}#jade-grove .plans{gap:10px}#jade-grove .plan{padding:19px 14px 15px;border-radius:5px 15px 5px 15px}#jade-grove .plan h3{font-size:21px;margin-top:0}#jade-grove .plan-price{font-size:28px;letter-spacing:-1px}#jade-grove .plan-price small{font-size:10px;margin-left:4px}#jade-grove .plan-sub{min-height:35px;margin-bottom:13px}#jade-grove .plan ul{min-height:160px;padding-top:15px}#jade-grove .plan li{font-size:12px;line-height:1.55}#jade-grove .payment-note{text-align:left;font-size:12px}#jade-grove .scripting-note{margin:18px 0 0;padding:13px 0;border-top:1px solid var(--jo-line);font-size:13px;color:var(--jo-ink)}
+@keyframes leaf-sway{from{transform:rotate(-.5deg)}to{transform:rotate(.5deg)}}
+@container(max-width:450px){#jade-grove .plans{grid-template-columns:1fr}#jade-grove .plan ul{min-height:0}#jade-grove .plan-sub{min-height:0}#jade-grove .plan-price{font-size:32px}}
+@media(max-width:700px){#jade-grove .grove-layout{grid-template-columns:1fr;gap:8px}#jade-grove .tree-stage{height:400px;margin:0 auto;width:100%}#jade-grove .tree-sway{height:400px}#jade-grove .info-content{padding:23px}#jade-grove .info-content.pricing-page{padding:22px 17px}#jade-grove .tree-nav button{font-size:14px}#jade-grove .tree-nav button:nth-child(n){left:var(--x)!important;top:var(--y)!important}}
+@media(prefers-reduced-motion:reduce){#jade-grove *{animation:none!important;transition:none!important}}
+
+#jade-grove button,#jade-grove select{text-transform:inherit}
+#jade-grove .creation-label,#jade-grove .project-name,#jade-grove .detail-caption h2{text-transform:none}
+#jade-grove.commission-active{padding-bottom:0}
+#jade-grove .commission-view>.heading{min-height:135px;display:flex;align-items:center}
+#jade-grove .grove-layout{align-items:start;min-height:490px}
+#jade-grove .tree-stage{align-self:end;height:460px;margin:0;width:100%}
+#jade-grove .tree-sway{height:100%}
+#jade-grove .botanical-tree{transform-origin:50% 100%}
+#jade-grove .info-content{margin-bottom:26px}
+#jade-grove .tree-nav button{box-shadow:none}
+#jade-grove .tree-nav button[data-info="Pricing"]{--x:50%;--y:12%}
+#jade-grove .tree-nav button.tree-invite{animation:tree-invite 800ms ease-in-out both}
+@keyframes tree-invite{0%,100%{background:var(--jo-bg);border-color:var(--jo-line)}50%{background:color-mix(in srgb,var(--jo-accent) 13%,var(--jo-bg));border-color:color-mix(in srgb,var(--jo-accent) 65%,var(--jo-line))}}
+@media(max-width:700px){#jade-grove .tree-stage{height:400px}#jade-grove .info-content{margin-bottom:24px}#jade-grove .commission-view>.heading{min-height:112px}}
+@media(prefers-reduced-motion:reduce){#jade-grove .tree-nav button.tree-invite{animation:none}}
+
+html{color-scheme:dark;background:#090f0c}body{margin:0;background:#090f0c}button{cursor:pointer}button:disabled{cursor:default}button:focus-visible,select:focus-visible{outline:2px solid #b2dfbf;outline-offset:4px}
+#jade-grove{max-width:1440px;margin:0 auto;min-height:100svh;display:flex;flex-direction:column}#jade-grove>header{flex-shrink:0}#jade-grove>.commission-view{flex:1;display:flex;flex-direction:column}#jade-grove .grove-layout{flex:1}#jade-grove .gallery{isolation:isolate}#jade-grove .work-view{padding-bottom:12px}
+/* The page fills the browser; gallery height is the space left after its controls. */
+html,body{min-height:100%;width:100%;overflow-x:clip}
+#jade-grove{box-sizing:border-box;width:100%;max-width:none;margin:0;min-height:100dvh;padding-bottom:24px;--page-header:clamp(60px,9dvh,80px)}
+#jade-grove>header{height:var(--page-header);min-height:var(--page-header)}
+#jade-grove:not(.commission-active):not(.detail-active){height:100dvh;min-height:560px}
+#jade-grove .work-view{flex:1;min-height:0;padding-bottom:0}
+#jade-grove .browse{height:100%;display:grid;grid-template-rows:auto auto minmax(140px,1fr) auto auto auto;min-height:0}
+#jade-grove .browse>.heading{padding:clamp(14px,3dvh,32px) 0 clamp(12px,2.5dvh,26px)}
+#jade-grove .gallery{height:auto;min-height:0}
+#jade-grove .creation{top:11%;height:78%;width:auto;aspect-ratio:25/32;max-width:44%}
+#jade-grove .carousel-dots{margin:5px 0 16px}
+#jade-grove .gallery-bottom{padding-top:clamp(12px,2dvh,22px)}
+#jade-grove .gesture-hint{margin-top:clamp(10px,2dvh,20px);margin-bottom:0}
+#jade-grove.commission-active{padding-bottom:0}
+#jade-grove .grove-layout{grid-template-columns:minmax(260px,34%) minmax(0,1fr);gap:clamp(24px,3vw,70px)}
+#jade-grove .tree-stage{max-width:600px;width:100%;height:clamp(420px,65dvh,900px);justify-self:start;align-self:end}
+#jade-grove .tree-sway{height:100%}
+#jade-grove .tree-nav button{max-width:none;min-height:clamp(53px,6dvh,85px);font-size:clamp(14px,1.05vw,21px)}
+#jade-grove .info-content{width:100%;min-width:0}
+#jade-grove.detail-active .work-view{flex:initial}
+@media(max-width:700px){
+#jade-grove .grove-layout{grid-template-columns:1fr;gap:8px}
+#jade-grove .tree-stage{height:400px;max-width:400px;justify-self:center}
+#jade-grove .tree-nav button{font-size:14px;min-height:53px}
+}
+@media(max-width:600px){
+#jade-grove .creation{max-width:57%;height:76%;top:12%}
+#jade-grove .browse>.heading{padding:18px 0}
+#jade-grove .gallery-bottom{gap:10px;padding-top:12px}
+#jade-grove .carousel-dots{margin-bottom:12px}
+#jade-grove .gesture-hint{font-size:11px;line-height:1.4}
+#jade-grove{padding-bottom:16px}
+#jade-grove.commission-active{padding-bottom:0}
+}
+#jade-grove.detail-active{height:100dvh;min-height:560px}
+#jade-grove.detail-active .work-view{flex:1;min-height:0}
+#jade-grove .detail{height:100%;display:grid;grid-template-rows:auto minmax(0,1fr) auto;padding:20px 0 0;min-height:0}
+#jade-grove .media-space{min-height:0;margin:20px 0;align-items:center}
+#jade-grove .detail-caption{display:block;text-align:center;padding:8px 0 0}
+#jade-grove .detail-caption p{margin:8px 0 0}
+#jade-grove .video-layer{display:grid;place-items:center}
+#jade-grove .coming-video{font:clamp(24px,3vw,44px) 'Fraunces',serif;color:var(--jo-muted)}
+#jade-grove .actual-video{width:100%;height:100%;object-fit:contain}
+#jade-grove .tree-nav button{transition:transform 200ms ease-out,background 180ms,border-color 180ms}
+#jade-grove .tree-nav button[aria-pressed=true]{transform:translate(-50%,-50%) scale(1.045)}
+@media(min-width:701px){
+#jade-grove>.commission-view{display:grid;grid-template-columns:minmax(260px,34%) minmax(0,1fr);grid-template-rows:auto 1fr;column-gap:clamp(24px,3vw,70px);min-height:0}
+#jade-grove .commission-view>.heading{grid-column:1;grid-row:1;min-height:110px;align-self:start}
+#jade-grove .grove-layout{display:contents}
+#jade-grove .tree-stage{grid-column:1;grid-row:2}
+#jade-grove .info-content{grid-column:2;grid-row:1 / span 2;align-self:start;margin-top:24px}
+}
+#jade-grove .first-scroll-hint{position:absolute;top:2%;left:10px;right:10px;text-align:center;font-size:12px;color:var(--jo-muted);z-index:40;pointer-events:none;margin:0;transition:opacity 450ms ease;}
+#jade-grove .first-scroll-hint.dismissed{opacity:0}
+#jade-grove .back,#jade-grove .media-tabs button,#jade-grove .open-project,#jade-grove .arrows button{transition:transform 160ms ease,background 180ms ease,border-color 180ms ease,color 180ms ease}
+#jade-grove .back:hover,#jade-grove .media-tabs button:hover,#jade-grove .open-project:hover,#jade-grove .arrows button:hover{transform:translateY(-2px);border-color:var(--jo-accent)}
+#jade-grove .back:active,#jade-grove .media-tabs button:active,#jade-grove .open-project:active,#jade-grove .arrows button:active{transform:translateY(0) scale(.97)}
+#jade-grove .scripting-note,#jade-grove .payment-note{padding-left:20px;list-style:disc}
+#jade-grove .info-body .scripting-note li,#jade-grove .info-body .payment-note li{margin-bottom:8px}
+#jade-grove.is-starting{pointer-events:none}
+@media(prefers-reduced-motion:reduce){#jade-grove .first-scroll-hint{transition:none}#jade-grove button{transition:none!important}}
+
+#jade-grove .handle{display:flex;align-items:center;gap:10px;white-space:nowrap}
+#jade-grove .handle img{width:34px;height:34px;object-fit:cover;border-radius:8px}
+#jade-grove img,#jade-grove video{-webkit-user-drag:none;-webkit-touch-callout:none;user-select:none}
+#jade-grove .first-scroll-hint{top:auto;bottom:1%;font-size:11px}
+@media(max-width:600px){#jade-grove header{flex-wrap:wrap;height:auto;min-height:var(--page-header);padding:10px 0;gap:8px}#jade-grove .handle{display:flex;margin-left:auto;font-size:10px;gap:5px}#jade-grove .handle img{width:25px;height:25px}#jade-grove .first-scroll-hint{font-size:10px;left:8px;right:8px}}
+#jade-grove .browse{grid-template-rows:auto auto minmax(140px,1fr) auto auto}
+
+/* A fine dark edge keeps the faint watermarks legible on bright artwork. */
+#jade-grove .watermarks span{-webkit-text-stroke:.45px rgba(0,0,0,.65);paint-order:stroke fill;text-shadow:0 0 1px rgba(0,0,0,.35)}
+
+#jade-grove .watermarks>.watermark-tile{width:calc(100% + 180px);height:100%;background-image:var(--watermark-tile);background-size:180px 78px;background-repeat:repeat}
+#jade-grove .creation[inert] .watermark-tile{animation-play-state:paused}
+</style>
+<script src="portfolio-media.js"></script>
+<script type="application/json" id="grove-data">{"info": {"Terms of Service": "\n                <ul>\n                    <li>By commissioning me, you agree that upon receiving a product, you will NOT redistribute, resell or claim of it as your own creation. If you plan to use a product by me in a public game published by yourself, attribution is not required but appreciated :)</li>\n                    <li>You may not request me to create any asset that breaks Roblox ToS or is commonly deemed inappropriate or NSFW. No exceptions!</li>\n                    <li>I\u2019m a human and can make mistakes. I enjoy what I do dearly and strive to create a quality product for you. If I don\u2019t meet your quality standards, don\u2019t be a dick about it. Click the \u201cRefunds\u201d button for more information about dissatisfaction with your commission.</li>\n                    <li>Upon sending of a final product, it will not be able to undergo large revisions or changes unless I deem it necessary for its quality.</li>\n                    <li>You MUST pay upfront in order for your asset to start being made. We can plan beforehand accordingly to ensure you are getting exactly what you want to receive (if you are looking for something specific).</li>\n                </ul>", "Timing": "\n                <p>Delivery should not take more than two weeks on my end for most projects, with most taking under a week. Larger, more expensive requests, however, could take much longer depending on its complexity and the amount of tweaks requested.</p>\n                <p>Please understand I am a human and am not always online working on digital assets. I\u2019m also a STEM college student, which can affect the speed of delivery at unexpected times. In the rare case a commission takes longer than expected, expect a prompt DM!</p>\n            ", "Refunds": "\n                <ul>\n                    <li>If for any reason I am not able to deliver your product within a clarified timeframe, whether it be an emergency or complication on my end, you may request a full refund and your unfinished commission, free of charge (if you wish).</li>\n                    <li>For bigger projects, if you wish to request a refund for an ongoing commission, you MUST do so BEFORE the asset(s) are at a considerably made state. If the asset is nearly done, full refunds are not possible.</li>\n                    <li>Full robux refunds will only give you 70% of your upfront payment.</li>\n                    <li><strong>You are 50% responsible for the commission.</strong> Ensure you are doing your best to tell me exactly what you need, if it is specific, to minimize refunds based on dissatisfaction of my output. It is your responsibility to check DMs frequently for progress updates, where you can in the moment request adjustments. Failure to respond to DMs for a LONG period of time may lead to cancelation of a commission without refund guarantees!</li>\n                </ul>\n            ", "About Me": "\n                <ul>\n                    <li>I\u2019ve been using Roblox Studio for 9 years!</li>\n                    <li>I have 3 years of VFX & Modeling experience and 7 years of Building experience.</li>\n                    <li>For modeling, I use Blender as my primary program.</li>\n                    <li>I do not create my own textures for VFX projects unless necessary or requested to do so (I use open-source image libraries).</li>\n                </ul>"}}</script>
+<script>(()=>{
+const root=document.getElementById('jade-grove'),data=JSON.parse(document.getElementById('grove-data').textContent),q=s=>root.querySelector(s),qa=s=>[...root.querySelectorAll(s)],gallery=q('.gallery'),ring=q('.ring'),reduced=matchMedia('(prefers-reduced-motion: reduce)');
+const collections=Object.fromEntries(Object.entries(window.PORTFOLIO_MEDIA).map(([k,items])=>[k,items.map(x=>({...x,img:x.image}))]));data.art=collections.VFX;const initialProject=data.art.length?Math.floor(Math.random()*data.art.length):0;const positions={VFX:initialProject,Models:0,Misc:0};let N=data.art.length;const wrap=n=>(n%N+N)%N,design={snap:1,grow:1.065,watermark:true};let position=initialProject,target=position,velocity=0,frame=0,lastTime=0,selected=initialProject,category='VFX',view='work',drag=null,moved=false,growTimer,wheelSum=0,lastWheel=0,lastStep=0,categoryToken=0,mediaToken=0,mode='image',playing=true,videoTime=0;
+const motion=(el,keys,opts={})=>reduced.matches?Promise.resolve():el.animate(keys,{duration:230,easing:'cubic-bezier(.2,.8,.2,1)',...opts}).finished.catch(()=>{});
+// Rasterize once and share the tile: no animated grid of outlined text nodes.
+function makeWatermarkTile(){
+ const canvas=document.createElement('canvas'),ratio=Math.min(devicePixelRatio||1,2);
+ canvas.width=180*ratio;canvas.height=78*ratio;
+ const ctx=canvas.getContext('2d');ctx.scale(ratio,ratio);
+ ctx.font='500 15px "Josefin Sans", sans-serif';ctx.textBaseline='middle';
+ ctx.lineWidth=.45;ctx.strokeStyle='rgba(0,0,0,.65)';ctx.strokeText('@johnmasterxx',0,39);
+ ctx.fillStyle='#e2f3e9';ctx.fillText('@johnmasterxx',0,39);
+ root.style.setProperty('--watermark-tile','url("'+canvas.toDataURL()+'")');
+}
+function watermark(el){const stream=document.createElement('div');stream.className='watermark-tile';el.append(stream);}
+makeWatermarkTile();document.fonts.ready.then(makeWatermarkTile);
+let cards=[];function buildCards(){qa('[data-category]').forEach(b=>{let count=b.querySelector('span');if(!count){count=document.createElement('span');b.append(' ',count);}count.textContent=collections[b.dataset.category].length;});ring.replaceChildren();cards=data.art.map((item,i)=>{const b=document.createElement('button');b.className='creation cursor-interaction';b.setAttribute('aria-label',item.name+' — select creation');b.innerHTML='<span class="creation-inner"><img draggable="false" alt=""><span class="watermarks" aria-hidden="true"></span><span class="creation-label"></span></span>';b.querySelector('img').src=item.img;b.querySelector('img').alt=item.name+' VFX';b.querySelector('.creation-label').textContent=item.name;watermark(b.querySelector('.watermarks'));b.addEventListener('click',()=>{if(moved)return;if(i===selected&&Math.abs(position-target)<.05)openDetail();else go(Math.round(target)+wrap(i-wrap(Math.round(target))+N/2)-N/2);});ring.append(b);return b;});q('.carousel-dots').replaceChildren(...data.art.map(()=>document.createElement('span')));applyDesign();}watermark(q('.still-layer .watermarks'));
+function clearGrow(){ring.classList.remove('is-settled');clearTimeout(growTimer);cards.forEach(c=>c.classList.remove('focus-grow'));}
+function queueGrow(){clearTimeout(growTimer);growTimer=setTimeout(()=>{if(!drag&&N>0&&view==='work'&&q('.detail').hidden){cards[selected].classList.add('focus-grow');ring.classList.add('is-settled');}},550);}
+function paint(){if(N){const live=wrap(Math.round(position));qa('.carousel-dots span').forEach((d,i)=>d.classList.toggle('active',i===live));q('.carousel-dots').setAttribute('aria-label','Creation '+(live+1)+' of '+N);}const w=gallery.clientWidth;cards.forEach((card,i)=>{const d=wrap(i-position+N/2)-N/2,a=Math.abs(d),visible=a<3.8;if(!visible){if(!card.inert){card.style.visibility='hidden';card.inert=true;}return;}const x=Math.sign(d)*(a<=1?a*.235:.235+(a-1)*.103)*w;const z=-a*70,scale=1-Math.min(a,4)*.105;card.style.transform=`translateX(-50%) translateX(${x}px) translateZ(${z}px) rotateY(${-Math.sign(d)*Math.min(a,3)*17}deg) scale(${scale})`;card.style.visibility=visible?'visible':'hidden';card.inert=!visible;card.style.opacity=String(a<3.1?1:Math.max(0,(3.8-a)/.7));card.style.zIndex=String(30-Math.round(a*5));card.setAttribute('aria-pressed',i===selected?'true':'false');});}
+function announce(){if(!N)return;selected=wrap(Math.round(target));q('.project-name').textContent=data.art[selected].name;q('.count').textContent=String(selected+1).padStart(2,'0')+' — '+N;q('.current-category').textContent=category;}
+let fastWheelUntil=0;function dismissScrollHint(){q('.first-scroll-hint').classList.add('dismissed');}
+function tick(time){const dt=Math.min((time-lastTime)/1000||.016,.025);lastTime=time;if(time<fastWheelUntil){position+=(target-position)*(1-Math.exp(-dt/0.022));velocity=0;}else{velocity+=(420*design.snap*(target-position)-28*Math.sqrt(design.snap)*velocity)*dt;position+=velocity*dt;}paint();if(Math.abs(target-position)>.001||Math.abs(velocity)>.008){frame=requestAnimationFrame(tick);}else{position=target;velocity=0;frame=0;paint();if(!drag)queueGrow();}}
+function start(){if(reduced.matches){position=target;velocity=0;paint();if(!drag)queueGrow();return;}if(!frame){lastTime=performance.now();frame=requestAnimationFrame(tick);}}
+function go(n){if(!N||switching)return;clearGrow();target=n;announce();start();}
+q('.previous').onclick=()=>go(Math.round(target)-1);q('.next').onclick=()=>go(Math.round(target)+1);
+let wheelIdle;let switching=false,wheelState={last:0,mag:0,sign:0,total:0,used:false,step:0,rising:0};
+q('.browse').addEventListener('wheel',e=>{if(!N||switching||e.ctrlKey||!q('.detail').hidden)return;e.preventDefault();e.stopPropagation();const raw=Math.abs(e.deltaY)>=Math.abs(e.deltaX)?e.deltaY:e.deltaX;if(!raw)return;const units=e.deltaMode===1?raw/3:e.deltaMode===2?raw*3:raw/80;const delta=Math.max(-3,Math.min(3,units));const sign=Math.sign(delta);if(wheelState.sign&&sign!==wheelState.sign)target=position;wheelState.sign=sign;clearGrow();target+=delta;position+=(target-position)*.65;velocity=0;fastWheelUntil=performance.now()+350;announce();paint();start();if(Math.abs(delta)>.02)dismissScrollHint();clearTimeout(wheelIdle);wheelIdle=setTimeout(()=>{fastWheelUntil=performance.now()+200;go(Math.round(target));},100);},{passive:false});
+gallery.addEventListener('pointerdown',e=>{if(!N||switching||e.button!==0)return;clearTimeout(wheelIdle);clearGrow();moved=false;drag={x:e.clientX,base:position,id:e.pointerId};});
+gallery.addEventListener('pointermove',e=>{if(!drag)return;const dx=e.clientX-drag.x;if(Math.abs(dx)>6){moved=true;gallery.setPointerCapture(e.pointerId);target=drag.base-dx/Math.max(95,gallery.clientWidth*.18);start();}});
+function release(){if(!drag)return;if(moved&&Math.abs(target-drag.base)>.4)dismissScrollHint();drag=null;go(Math.round(target));setTimeout(()=>{moved=false;},60);}gallery.addEventListener('pointerup',release);gallery.addEventListener('pointercancel',release);gallery.addEventListener('lostpointercapture',release);
+gallery.addEventListener('keydown',e=>{if(['ArrowRight','ArrowLeft','ArrowUp','ArrowDown'].includes(e.key)){e.preventDefault();go(Math.round(target)+(['ArrowRight','ArrowDown'].includes(e.key)?1:-1));}});
+function tabIndicator(){const b=q('[data-category][aria-pressed="true"]');q('.tab-line').style.width=b.offsetWidth+'px';q('.tab-line').style.transform='translateX('+b.offsetLeft+'px)';}
+qa('[data-category]').forEach(b=>b.onclick=async()=>{if(category===b.dataset.category&&!switching)return;const token=++categoryToken;clearTimeout(wheelIdle);clearGrow();positions[category]=Math.round(target);switching=true;cancelAnimationFrame(frame);frame=0;velocity=0;const next=b.dataset.category;qa('[data-category]').forEach(x=>x.setAttribute('aria-pressed',x===b));tabIndicator();const out=ring.hidden?q('.empty'):ring;out.getAnimations().forEach(a=>a.cancel());await motion(out,[{transform:'translateY(0)',opacity:1},{transform:'translateY(340px)',opacity:0}],{duration:270,easing:'cubic-bezier(.4,0,.7,1)'});if(token!==categoryToken)return;category=next;data.art=collections[category];N=data.art.length;position=target=positions[category]||0;selected=N?wrap(Math.round(target)):0;buildCards();tabIndicator();q('.browse h1').textContent={VFX:'Visual Effects',Models:'Modelling',Misc:'Miscellaneous'}[category];const empty=!N;ring.hidden=empty;q('.empty').hidden=!empty;q('.carousel-dots').hidden=empty;q('.gallery-bottom').hidden=empty;announce();paint();const incoming=empty?q('.empty'):ring;await motion(incoming,[{transform:'translateY(340px)',opacity:0},{transform:'translateY(0)',opacity:1}],{duration:340,easing:'cubic-bezier(.16,.85,.25,1)'});if(token!==categoryToken)return;switching=false;wheelState.used=false;wheelState.last=0;if(N)queueGrow();});
+function mediaSize(m){const space=q('.media-space'),img=cards[selected].querySelector('img'),v=q('.actual-video');const ratio=m==='video'?(v.videoWidth/v.videoHeight||16/9):(img.naturalWidth/img.naturalHeight||.8);const h=Math.max(1,Math.min(space.clientHeight,space.clientWidth/ratio));return {w:h*ratio,h};}
+function setSize(m){const s=mediaSize(m);q('.media-frame').style.width=s.w+'px';q('.media-frame').style.height=s.h+'px';}
+function openDetail(){root.classList.add('detail-active');clearGrow();mode='image';mediaToken++;q('.browse').hidden=true;q('.detail').hidden=false;const img=q('.detail-image');img.src=data.art[selected].img;img.alt=data.art[selected].name;img.onload=()=>{if(mode==='image')setSize('image');};q('.detail-caption h2').textContent=data.art[selected].name;q('.still-layer').hidden=false;q('.video-layer').hidden=true;q('.still-layer').style.opacity='1';q('.video-layer').style.opacity='1';q('.media-note').textContent='image preview';qa('[data-media]').forEach(b=>{b.disabled=false;b.setAttribute('aria-pressed',b.dataset.media==='image');});setSize('image');motion(q('.media-frame'),[{transform:'translateY(28px) scale(.88)'},{transform:'translateY(0) scale(1)'}],{duration:260});q('.back').focus();}
+function closeDetail(){q('.actual-video').pause();root.classList.remove('detail-active');mediaToken++;q('.detail').hidden=true;q('.browse').hidden=false;mode='image';motion(q('.browse'),[{transform:'translateY(-12px)'},{transform:'translateY(0)'}],{duration:190});queueGrow();q('.open-project').focus();}
+q('.open-project').onclick=openDetail;q('.back').onclick=closeDetail;root.addEventListener('keydown',e=>{if(e.key==='Escape'&&!q('.detail').hidden)closeDetail();});
+qa('[data-media]').forEach(b=>b.onclick=async()=>{if(mode===b.dataset.media)return;const token=++mediaToken,next=b.dataset.media;qa('[data-media]').forEach(x=>x.disabled=true);const old=q(mode==='image'?'.still-layer':'.video-layer');await motion(old,[{opacity:1},{opacity:0}],{duration:110});if(token!==mediaToken)return;old.hidden=true;const box=q('.media-frame'),from={width:box.offsetWidth+'px',height:box.offsetHeight+'px'},sz=mediaSize(next);mode=next;box.style.width=sz.w+'px';box.style.height=sz.h+'px';await motion(box,[from,{width:sz.w+'px',height:sz.h+'px'}],{duration:250});if(token!==mediaToken)return;const fresh=q(mode==='image'?'.still-layer':'.video-layer');fresh.hidden=false;if(mode==='video'){const video=q('.actual-video'),source=data.art[selected].video;video.hidden=!source;q('.coming-video').hidden=!!source;if(source){video.src=source;video.onloadedmetadata=()=>setSize('video');}}else q('.actual-video').pause();q('.media-note').textContent=mode==='video'?'video preview':'image preview';qa('[data-media]').forEach(x=>{x.disabled=false;x.setAttribute('aria-pressed',x.dataset.media===mode);});motion(fresh,[{opacity:0},{opacity:1}],{duration:120});});
+let treeIntroduced=false;const inviteTimers=[];
+function stopInvite(){inviteTimers.forEach(clearTimeout);inviteTimers.length=0;qa('.tree-nav button').forEach(b=>b.classList.remove('tree-invite'));}
+function inviteTree(){if(treeIntroduced)return;treeIntroduced=true;if(reduced.matches)return;qa('.tree-nav button').forEach((b,i)=>{inviteTimers.push(setTimeout(()=>b.classList.add('tree-invite'),350+i*600));inviteTimers.push(setTimeout(()=>b.classList.remove('tree-invite'),1150+i*600));});}
+q('.tree-nav').addEventListener('pointerdown',stopInvite);q('.tree-nav').addEventListener('keydown',stopInvite);
+qa('[data-view]').forEach(b=>b.onclick=()=>{if(view===b.dataset.view)return;view=b.dataset.view;const work=view==='work';if(!work)q('.actual-video').pause();root.classList.toggle('detail-active',work&&!q('.detail').hidden);root.classList.toggle('commission-active',!work);if(!work)inviteTree();else stopInvite();q('.work-view').hidden=!work;q('.commission-view').hidden=work;qa('header nav button').forEach(n=>n.setAttribute('aria-pressed',n.dataset.view===view));motion(q(work?'.work-view':'.commission-view'),[{transform:'translateY(18px) scale(.992)'},{transform:'translateY(0) scale(1)'}],{duration:280});});
+const tiers=[{name:'Simple',sub:'Small sparks, big character.',usd:['$2–15','$5–20'],robux:['500–3,000','1,300–5,200'],features:['Simple emits & small particles','Atmospheres','No modelling included']},{name:'Advanced',sub:'A little more magic.',usd:['$20–80','$30–100'],robux:['5,200–21,000','8,000–25,000'],features:['Small auras & emitter sequences','Some modelling if needed','Extra touchups']},{name:'Complex',sub:'Room to go all out.',usd:['$100+','$130+'],robux:['25,000+','33,000+'],features:['Big auras, cutscenes & map atmospheres','Modelling if needed','Extra touchups']}];
+let priceCategory='VFX',priceProcess='Normal',priceVersion=0;
+function showInfo(name){q('.info-content').hidden=false;q('.info-content h2').textContent=name;qa('[data-info]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.info===name));q('.info-content').classList.toggle('pricing-page',name==='Pricing');const body=q('.info-body');if(name!=='Pricing'){body.innerHTML=data.info[name];return;}
+body.innerHTML='<div class="price-switches"><div class="segmented" aria-label="Pricing category"><span class="segment-thumb"></span><button data-price-category="VFX">VFX</button><button data-price-category="Models">Models</button></div><div class="segmented process" aria-label="Creation process"><span class="segment-thumb"></span><button data-process="Normal">Normal</button><button data-process="Extra Revisions">Extra revisions</button></div></div><div class="plans-stage"><div class="plans"></div></div><ul class="scripting-note"><li>need <strong>scripted</strong> effects? can do! feel free to inquire!</li><li>you <strong>ONLY</strong> have to pay tax if you pay with robux (roblox tax). $USD payments are as stated.</li></ul><ul class="payment-note"><li>i accept <strong>Paypal/Venmo</strong> for $USD payments or robux <strong>AT THE DEV-EX EQUIVALENT</strong></li><li>10,000 robux = $38 USD.</li></ul>';
+const updateControls=()=>{qa('[data-price-category]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.priceCategory===priceCategory));qa('[data-process]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.process===priceProcess));qa('.segmented').forEach(group=>{const b=group.querySelector('[aria-pressed="true"]');const thumb=group.querySelector('.segment-thumb');thumb.style.width=b.offsetWidth+'px';thumb.style.transform='translateX('+(b.offsetLeft-4)+'px)';});};
+const draw=()=>{const extra=priceProcess!=='Normal';q('.plans').innerHTML=priceCategory==='Models'?'<div class="price-empty"><h3>Coming soon :)</h3><p>Model commissions will have their own prices here.</p></div>':tiers.map((t,i)=>'<section class="plan"><h3>'+t.name+'</h3><div class="plan-price">'+t.usd[extra?1:0]+'<small>USD</small></div><p class="robux-price">'+t.robux[extra?1:0]+' Robux <span>+ 30% tax</span></p><ul>'+t.features.map(f=>'<li>'+f+'</li>').join('')+'</ul><span class="plan-process">'+(extra?'Extra revisions':'Standard process')+'</span></section>').join('');};
+const change=async()=>{const version=++priceVersion;updateControls();const stage=q('.plans');stage.getAnimations().forEach(a=>a.cancel());await motion(stage,[{transform:'translateY(0)'},{transform:'translateY(3px)'}],{duration:90});if(version!==priceVersion||!q('.plans'))return;draw();qa('.plan,.price-empty').forEach((card,i)=>motion(card,[{transform:'translateY(5px)'},{transform:'translateY(0)'}],{duration:190}));};
+qa('[data-price-category]').forEach(b=>b.onclick=()=>{if(priceCategory===b.dataset.priceCategory)return;priceCategory=b.dataset.priceCategory;change();});qa('[data-process]').forEach(b=>b.onclick=()=>{if(priceProcess===b.dataset.process)return;priceProcess=b.dataset.process;change();});draw();updateControls();qa('.price-switches button').forEach(b=>b.classList.add('cursor-interaction'));
+}
+
+qa('[data-info]').forEach(b=>b.onclick=()=>{showInfo(b.dataset.info);priceVersion++;motion(q('.info-content'),[{transform:'translateY(5px)'},{transform:'translateY(0)'}],{duration:190});});
+buildCards();qa('button').forEach(b=>b.classList.add('cursor-interaction'));new ResizeObserver(()=>{paint();tabIndicator();qa('.segmented').forEach(group=>{const b=group.querySelector('[aria-pressed="true"]'),thumb=group.querySelector('.segment-thumb');if(b&&thumb){thumb.style.width=b.offsetWidth+'px';thumb.style.transform='translateX('+(b.offsetLeft-4)+'px)';}});if(!q('.detail').hidden)setSize(mode);}).observe(root);new ResizeObserver(paint).observe(gallery);new ResizeObserver(()=>{if(!q('.detail').hidden)setSize(mode);}).observe(q('.media-space'));announce();paint();tabIndicator();queueGrow();
+function applyDesign(){root.style.setProperty('--focus-grow',design.grow);qa('.watermarks').forEach(el=>el.hidden=!design.watermark);}
+applyDesign();
+root.addEventListener('contextmenu',e=>{if(e.target.closest('img,video,.creation,.media-frame'))e.preventDefault();});
+root.addEventListener('dragstart',e=>{if(e.target.closest('img,video,.creation,.media-frame'))e.preventDefault();});
+q('.actual-video').addEventListener('error',()=>{q('.actual-video').hidden=true;q('.coming-video').hidden=false;});
+
+// Local launcher scans the folders; static hosting uses the generated manifest.
+let mediaFingerprint=JSON.stringify(window.PORTFOLIO_MEDIA),checkingMedia=false;
+async function syncLocalMedia(){
+ if(checkingMedia||document.hidden||drag||switching||!q('.detail').hidden)return;
+ checkingMedia=true;
+ try{
+  const response=await fetch('/__portfolio_media',{cache:'no-store'});
+  if(!response.ok)return;
+  const next=await response.json(),fingerprint=JSON.stringify(next);
+  if(fingerprint===mediaFingerprint)return;
+  const current=data.art[selected]?.image;
+  clearTimeout(wheelIdle);clearGrow();cancelAnimationFrame(frame);frame=0;velocity=0;
+  for(const key of Object.keys(collections))collections[key]=(next[key]||[]).map(x=>({...x,img:x.image}));
+  window.PORTFOLIO_MEDIA=next;mediaFingerprint=fingerprint;
+  data.art=collections[category];N=data.art.length;
+  const kept=data.art.findIndex(x=>x.image===current);
+  position=target=selected=kept>=0?kept:0;positions[category]=selected;
+  buildCards();ring.hidden=!N;q('.empty').hidden=!!N;q('.carousel-dots').hidden=!N;q('.gallery-bottom').hidden=!N;
+  announce();paint();tabIndicator();if(N)queueGrow();
+ }catch(error){/* Keep the existing gallery if the local server is stopped. */}
+ finally{checkingMedia=false;}
+}
+if(location.protocol==='http:'&&['127.0.0.1','localhost'].includes(location.hostname)){
+ setInterval(syncLocalMedia,1500);window.addEventListener('focus',syncLocalMedia);
+}
+
+// One entrance per page load; inert blocks mouse and keyboard activation.
+root.inert=true;root.classList.add('is-starting');
+const entrance=[q('header'),q('.browse>.heading'),q('.category-bar'),q('.ring'),q('.carousel-dots'),q('.gallery-bottom'),q('.first-scroll-hint')];
+if(!reduced.matches)entrance.forEach((el,i)=>el.animate([{transform:'translateY('+ (i===0?-22:32)+'px)'},{transform:'translateY(0)'}],{duration:1000-i*40,delay:i*40,easing:'cubic-bezier(.16,.8,.2,1)',fill:'backwards'}));
+setTimeout(()=>{root.inert=false;root.classList.remove('is-starting');},1000);
+})();
+</script>
 </body>
 </html>

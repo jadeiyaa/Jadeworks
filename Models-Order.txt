@@ -1,0 +1,4 @@
+# Move whole lines up or down to reorder the gallery. Save as plain text.
+# Use project names without file extensions. Unlisted new projects appear at the end.
+
+horse
