@@ -3,3 +3,6 @@ __pycache__/
 .DS_Store
 index.backup-*.html
 .portfolio-media.tmp
+/ADDING-MEDIA.md
+/Open Portfolio.command
+/AI Prompts/
