@@ -6,3 +6,18 @@ index.backup-*.html
 /ADDING-MEDIA.md
 /Open Portfolio.command
 /AI Prompts/
+
+/local-glow.js
+
+/local-headings.js
+
+/local-turntable.js
+# Original 3D source stays private, outside published assets.
+*.fbx
+*.blend
+
+/Turntables/car/
+*.blend1
+*.glb
+*.gltf
+*.obj

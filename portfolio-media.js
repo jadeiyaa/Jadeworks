@@ -2,11 +2,6 @@
 window.PORTFOLIO_MEDIA = {
   "VFX": [
     {
-      "name": "Wishbone",
-      "image": "VFX-Photos/Wishbone.png",
-      "video": ""
-    },
-    {
       "name": "Confluence",
       "image": "VFX-Photos/Confluence.png",
       "video": ""
@@ -14,11 +9,6 @@ window.PORTFOLIO_MEDIA = {
     {
       "name": "0nian",
       "image": "VFX-Photos/0nian.png",
-      "video": ""
-    },
-    {
-      "name": "Asminthia",
-      "image": "VFX-Photos/Asminthia.png",
       "video": ""
     },
     {
@@ -37,8 +27,8 @@ window.PORTFOLIO_MEDIA = {
       "video": ""
     },
     {
-      "name": "Endozivite",
-      "image": "VFX-Photos/Endozivite.png",
+      "name": "Quasar 618",
+      "image": "VFX-Photos/Quasar%20618.png",
       "video": ""
     },
     {
@@ -52,13 +42,18 @@ window.PORTFOLIO_MEDIA = {
       "video": ""
     },
     {
-      "name": "Niosha",
-      "image": "VFX-Photos/Niosha.png",
+      "name": "Asminthia",
+      "image": "VFX-Photos/Asminthia.png",
       "video": ""
     },
     {
-      "name": "NOOPA",
-      "image": "VFX-Photos/NOOPA.png",
+      "name": "Endozivite",
+      "image": "VFX-Photos/Endozivite.png",
+      "video": ""
+    },
+    {
+      "name": "Niosha",
+      "image": "VFX-Photos/Niosha.png",
       "video": ""
     },
     {
@@ -67,13 +62,18 @@ window.PORTFOLIO_MEDIA = {
       "video": ""
     },
     {
-      "name": "Psi",
-      "image": "VFX-Photos/Psi.png",
+      "name": "Wishbone",
+      "image": "VFX-Photos/Wishbone.png",
       "video": ""
     },
     {
-      "name": "Quasar 618",
-      "image": "VFX-Photos/Quasar%20618.png",
+      "name": "NOOPA",
+      "image": "VFX-Photos/NOOPA.png",
+      "video": ""
+    },
+    {
+      "name": "Psi",
+      "image": "VFX-Photos/Psi.png",
       "video": ""
     },
     {
@@ -103,6 +103,11 @@ window.PORTFOLIO_MEDIA = {
     }
   ],
   "Models": [
+    {
+      "name": "Car",
+      "image": "Modelling-Photos/Car.png",
+      "video": ""
+    },
     {
       "name": "horse",
       "image": "Modelling-Photos/horse.png",
