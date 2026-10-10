@@ -42,13 +42,13 @@ window.PORTFOLIO_MEDIA = {
       "video": ""
     },
     {
-      "name": "Asminthia",
-      "image": "VFX-Photos/Asminthia.png",
+      "name": "Endozivite",
+      "image": "VFX-Photos/Endozivite.png",
       "video": ""
     },
     {
-      "name": "Endozivite",
-      "image": "VFX-Photos/Endozivite.png",
+      "name": "Pith",
+      "image": "VFX-Photos/Pith.png",
       "video": ""
     },
     {
@@ -57,8 +57,8 @@ window.PORTFOLIO_MEDIA = {
       "video": ""
     },
     {
-      "name": "Pith",
-      "image": "VFX-Photos/Pith.png",
+      "name": "Asminthia",
+      "image": "VFX-Photos/Asminthia.png",
       "video": ""
     },
     {
