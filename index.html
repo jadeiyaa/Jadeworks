@@ -14,21 +14,8 @@
 <div class="gallery" role="region" aria-label="3D portfolio gallery"><p class="first-scroll-hint">mouse scroll or hold click + swipe to see through galleries!</p><div class="ring"></div><div class="empty" hidden><span class="sprout" aria-hidden="true">✳</span><h2>Still growing.</h2><p>Modelling creations are coming soon :)</p></div></div>
 <div class="carousel-dots" role="img" aria-label="Creation position"></div><div class="gallery-bottom"><div class="active-title" aria-live="polite"><p class="eyebrow"><span class="current-category">VFX</span> / <span class="count">03 — 17</span></p><h2 class="project-name">Y</h2></div><button class="open-project">look closer</button><div class="arrows"><button class="previous" aria-label="Previous creation">←</button><button class="next" aria-label="Next creation">→</button></div></div></div>
 <section class="detail" hidden aria-label="Creation preview"><div class="detail-top"><button class="back">back</button><div class="media-tabs"><button data-media="image" aria-pressed="true">Image</button><button data-media="video" aria-pressed="false">Video preview</button></div></div><div class="media-space"><div class="media-frame"><div class="still-layer"><img class="detail-image" alt=""><div class="watermarks" aria-hidden="true"></div></div><div class="video-layer" hidden><p class="coming-video">coming soon</p><video class="actual-video" controls controlslist="nodownload noremoteplayback" disablepictureinpicture playsinline hidden></video></div></div></div><div class="detail-caption"><h2></h2><p class="media-note">VFX · Image preview</p></div></section></section>
-<section class="commission-view" hidden><div class="heading"><div><h1>commission info</h1></div></div><div class="grove-layout"><div class="tree-stage" aria-label="Commission tree navigation"><div class="tree-sway"><svg class="botanical-tree" viewBox="0 0 400 460" preserveAspectRatio="none" aria-hidden="true">
-<g class="wood" fill="none" stroke="currentColor" stroke-linecap="round">
-<path d="M193 460 L193 430 C205 376 181 329 199 270 C215 219 189 177 202 116 C211 82 203 59 200 40" stroke-width="3"/>
-<path d="M203.795 246 C175 214 142 218 118 186 C106 168 93 159 80 156 M202.785 207 C227 182 260 201 286 177 C307 156 319 160 328 144 M192.878 341 C161 318 131 330 110 304 C98 289 87 284 72 287 M194.649 362 C232 339 248 349 277 334 C303 322 308 310 326 307" stroke-width="2"/>
-<path d="M199.270 133 C173 117 154 113 146 91 M204.741 103 C232 91 240 71 247 55 M147 210 C150 190 138 172 127 164 M273 188 C269 168 277 150 291 141 M135 322 C132 344 118 351 105 357 M264 340 C264 365 280 380 292 387 M193 429 C177 433 164 436 152 439 M193 429 C207 438 220 440 235 441" stroke-width="1.3"/>
-</g>
-<g class="foliage" fill="currentColor">
-<path d="M147 95 Q113 97 124 66 Q148 69 147 95Z"/>
-<path d="M241 76 Q240 44 263 42 Q269 67 241 76Z"/><path d="M205 103 Q182 88 188 65 Q214 76 205 103Z"/>
-<path d="M130 177 Q102 181 103 156 Q128 149 130 177Z"/><path d="M290 147 Q280 124 306 112 Q313 138 290 147Z"/>
-<path d="M179 228 Q154 224 160 201 Q187 205 179 228Z"/><path d="M215 254 Q214 228 239 223 Q242 249 215 254Z"/>
-<path d="M139 332 Q111 326 113 307 Q135 305 139 332Z"/><path d="M105 356 Q82 350 79 372 Q102 379 105 356Z"/>
-<path d="M275 372 Q273 394 296 404 Q306 379 275 372Z"/><path d="M208 393 Q218 364 237 373 Q237 394 208 393Z"/>
-</g></svg>
-<div class="tree-art" aria-hidden="true"><div class="trunk"></div><div class="branch b1"></div><div class="branch b2"></div><div class="branch b3"></div><div class="branch b4"></div><i class="leaf l1"></i><i class="leaf l2"></i><i class="leaf l3"></i><i class="leaf l4"></i><span class="tree-ground">✧</span></div><nav class="tree-nav" aria-label="Commission information"><button data-info="Pricing" style="--x:50%;--y:12%">Pricing</button><button data-info="Terms of Service" style="--x:23%;--y:36%">Terms of Service</button><button data-info="Timing" style="--x:78%;--y:43%">Timing</button><button data-info="Refunds" style="--x:22%;--y:66%">Refunds</button><button data-info="About Me" style="--x:76%;--y:75%">About Me</button></nav></div></div><article class="info-content" hidden><h2></h2><div class="info-body"></div></article></div></section>
+<section class="commission-view" hidden><div class="heading"><div><h1>commission info</h1></div></div><div class="grove-layout"><div class="tree-stage" aria-label="Commission tree navigation"><div class="tree-sway"><canvas class="climbing-vine" aria-hidden="true"></canvas>
+<nav class="tree-nav" aria-label="Commission information"><button data-info="Pricing" style="--x:50%;--y:12%">Pricing</button><button data-info="Terms of Service" style="--x:23%;--y:36%">Terms of Service</button><button data-info="Timing" style="--x:78%;--y:43%">Timing</button><button data-info="Refunds" style="--x:22%;--y:66%">Refunds</button><button data-info="About Me" style="--x:76%;--y:75%">About Me</button></nav></div></div><article class="info-content" hidden><h2></h2><div class="info-body"></div></article></div></section>
 </div>
 
 <style>
@@ -158,6 +145,16 @@ html,body{min-height:100%;width:100%;overflow-x:clip}
 #jade-grove .creation[inert] .notable-star svg{animation-play-state:paused}
 @keyframes notable-breathe{0%,100%{transform:scale(.96)}50%{transform:scale(1.025)}}
 @media(prefers-reduced-motion:reduce){#jade-grove .notable-star svg{animation:none}#jade-grove .notable-star{transition:none}}
+
+/* Barely visible, green-tinted scenery shared by every page and preview. */
+body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;background-color:#416b4e;background-image:url("pagebg.png");background-size:cover;background-position:center;background-repeat:no-repeat;background-blend-mode:luminosity;opacity:.045}
+#jade-grove{background:transparent;z-index:1}
+
+/* Connected botanical navigation, animated together with its buttons. */
+#jade-grove .climbing-vine{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+#jade-grove .tree-sway{animation:none;transform:none;position:relative}
+#jade-grove .tree-nav button{left:var(--vine-x)!important;top:var(--vine-y)!important;width:42%;height:50px;min-height:50px;padding:6px;border-radius:6px 19px 6px 19px;animation:none!important;transform-origin:center;transition:background .25s,border-color .25s,box-shadow .25s}
+#jade-grove .tree-nav button:before{display:none}
 </style>
 <script src="scripts/model-turntable.js"></script>
 <script src="portfolio-media.js"></script>
@@ -275,6 +272,7 @@ if(!reduced.matches)entrance.forEach((el,i)=>el.animate([{transform:'translateY(
 setTimeout(()=>{root.inert=false;root.classList.remove('is-starting');},1000);
 })();
 </script>
+<script src="scripts/climbing-vine.js"></script>
 <script src="scripts/hover-glow.js"></script>
 <script src="scripts/heading-reveal.js"></script>
 </body>
