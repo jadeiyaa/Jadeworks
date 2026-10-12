@@ -147,7 +147,7 @@ html,body{min-height:100%;width:100%;overflow-x:clip}
 @media(prefers-reduced-motion:reduce){#jade-grove .notable-star svg{animation:none}#jade-grove .notable-star{transition:none}}
 
 /* Barely visible, green-tinted scenery shared by every page and preview. */
-body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;background-color:#416b4e;background-image:url("pagebg.png");background-size:cover;background-position:center;background-repeat:no-repeat;background-blend-mode:luminosity;opacity:.045}
+body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;background-color:#416b4e;background-image:url("pagebg.png");background-size:cover;background-position:center;background-repeat:no-repeat;background-blend-mode:luminosity;opacity:.045;transform:translateZ(0);will-change:transform;contain:strict}
 #jade-grove{background:transparent;z-index:1}
 
 /* Connected botanical navigation, animated together with its buttons. */

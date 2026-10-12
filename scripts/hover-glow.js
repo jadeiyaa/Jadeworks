@@ -25,17 +25,17 @@
  function clear(){pointer=null;for(const layer of active)layer.style.opacity=0;active.clear();}
  function draw(){
   frame=0;if(!pointer||!fine.matches)return;
-  const next=new Set();
+  const next=new Set(),updates=[];
   for(const el of targets){
    if(!el.isConnected||el.closest('[hidden],[inert]'))continue;
    const rect=el.getBoundingClientRect();if(!rect.width||!rect.height)continue;
    const dx=Math.max(rect.left-pointer.x,0,pointer.x-rect.right),dy=Math.max(rect.top-pointer.y,0,pointer.y-rect.bottom);
    if(Math.hypot(dx,dy)>120)continue;
    const layer=el.querySelector(':scope > .local-glow');
-   layer.style.setProperty('--gx',((pointer.x-rect.left)/rect.width*el.clientWidth)+'px');
-   layer.style.setProperty('--gy',((pointer.y-rect.top)/rect.height*el.clientHeight)+'px');
-   layer.style.opacity=1;next.add(layer);
+   updates.push({layer,x:((pointer.x-rect.left)/rect.width*el.clientWidth)+'px',y:((pointer.y-rect.top)/rect.height*el.clientHeight)+'px'});next.add(layer);
   }
+  // Finish geometry reads before any style writes to avoid repeated synchronous layouts.
+  for(const {layer,x,y} of updates){layer.style.setProperty('--gx',x);layer.style.setProperty('--gy',y);layer.style.opacity=1;}
   for(const layer of active)if(!next.has(layer))layer.style.opacity=0;
   active=next;
  }

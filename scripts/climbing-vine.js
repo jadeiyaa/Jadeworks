@@ -2,7 +2,7 @@
 (()=>{
  const root=document.getElementById('jade-grove'),stage=root.querySelector('.tree-stage'),canvas=stage.querySelector('canvas'),c=canvas.getContext('2d'),buttons=[...stage.querySelectorAll('.tree-nav button')];
  const settings={wind:true,strength:100},reduced=matchMedia('(prefers-reduced-motion: reduce)');
- let width=0,height=540,scaleY=1,ratio=1,raf=0,visible=true,pressedAt=-Infinity,pressDirection=1;
+ let width=0,height=540,scaleY=1,ratio=1,raf=0,visible=true,lastDraw=-Infinity,pressedAt=-Infinity,pressDirection=1;
  const positions=[[.5,164],[.25,258],[.75,342],[.25,426],[.75,510]];
  buttons.forEach((b,i)=>{b.dataset.x=positions[i][0];b.dataset.y=positions[i][1];b.style.setProperty('--vine-x',positions[i][0]*100+'%');b.style.setProperty('--vine-y',(positions[i][1]-80)/540*100+'%')});
 
@@ -35,7 +35,11 @@
    return {x:width*Number(b.dataset.x)+dx-23*Math.sin(radians),y:y+dy+23*Math.cos(radians)/scaleY,angle:radians};
   });
   // Taper the stem toward its growing tip, keeping the root anchored.
-  for(let y=607;y>164;y-=3)stroke([stem(y),stem(y-3)],1.1+2*(y-110)/497);
+  for(let start=607;start>164;start-=111){
+   const end=Math.max(164,start-111),points=[];
+   for(let y=start;y>end;y-=3)points.push(stem(y));
+   points.push(stem(end));stroke(points,1.1+2*((start+end)/2-110)/497);
+  }
   // Branches meet the exact rotated bottom-center attachment of each moving button.
   buttons.slice(1).forEach((b,i)=>{
    const side=Number(b.dataset.x)<.5?-1:1,ey=Number(b.dataset.y)+25,sy=ey+66;
@@ -50,9 +54,11 @@
   leaf(stem(570),-1,20,2);leaf(stem(588),1,15,2.8);
 
  }
- function frame(t){raf=0;draw(t);if(visible&&!document.hidden&&settings.wind&&!reduced.matches)raf=requestAnimationFrame(frame)}
- function restart(){cancelAnimationFrame(raf);raf=0;draw(performance.now());if(visible&&!document.hidden&&settings.wind&&!reduced.matches)raf=requestAnimationFrame(frame)}
+ function canDraw(){return visible&&!document.hidden&&!stage.closest("[hidden]")&&width>0&&height>0}
+ function frame(t){raf=0;if(!canDraw())return;if(t-lastDraw>=32){draw(t);lastDraw=t}if(settings.wind&&!reduced.matches)raf=requestAnimationFrame(frame)}
+ function restart(){cancelAnimationFrame(raf);raf=0;if(!canDraw())return;lastDraw=performance.now();draw(lastDraw);if(settings.wind&&!reduced.matches)raf=requestAnimationFrame(frame)}
  new ResizeObserver(()=>{width=stage.clientWidth;height=stage.clientHeight;scaleY=height/540;ratio=Math.min(devicePixelRatio||1,2);canvas.width=Math.round(width*ratio);canvas.height=Math.round(height*ratio);restart()}).observe(stage);
  new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;restart()}).observe(stage);
+ new MutationObserver(restart).observe(root.querySelector('.commission-view'),{attributes:true,attributeFilter:['hidden']});
  document.addEventListener('visibilitychange',restart);reduced.addEventListener('change',restart);
 })();
